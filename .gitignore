@@ -1,0 +1,6 @@
+#ignore all binary files
+/bin/
+**/*.class
+
+#ignore all jar files
+**/*.jar
