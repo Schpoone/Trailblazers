@@ -5,5 +5,5 @@
 #ignore all jar files
 **/*.jar
 
-#ignore .DS_Store's
+#ignore .DS_Stores
 **/.DS_Store
