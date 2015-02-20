@@ -2,8 +2,8 @@
 /bin/
 **/*.class
 
-#ignore all jar files
-**/*.jar
-
 #ignore .DS_Stores
 **/.DS_Store
+
+#ignore eclipse stuff
+**/.project
