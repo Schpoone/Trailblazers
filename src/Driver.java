@@ -17,7 +17,7 @@ public class Driver {
 		rightMotor = rm;
 		leftSensor = ls;
 		rightSensor = rs;
-		currentAction = new RestAction(this);
+		currentAction = new RestAction(this);//idk
 	}
 	
 	public void run() {
@@ -35,10 +35,10 @@ public class Driver {
 		float leftMotorSpeed = currentAction.throttle;
 		float rightMotorSpeed = currentAction.throttle;
 		if (currentAction.trim<0) {
-			leftMotorSpeed += 2*currentAction.throttle*currentAction.trim;
+			leftMotorSpeed += 2*currentAction.throttle*currentAction.trim;//if trim is negative it's abs is subtracted from the left motors speed
 		}
 		else {
-			rightMotorSpeed -= 2*currentAction.throttle*currentAction.trim;
+			rightMotorSpeed -= 2*currentAction.throttle*currentAction.trim;//if trim is positive it is subtracted from right motors speed
 		}
 		
 		// Set the motors

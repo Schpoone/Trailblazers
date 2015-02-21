@@ -19,7 +19,7 @@ public class ColorIdentifier {
 		{  0, 38,255}
 	};
 	
-	public static int identify(int r,int g,int b) {
+	public static int identify(int r,int g,int b) {// idk bout this whole l2 thing for colors
 		int[] lsr = new int[7];
 		int min = -1,minlsr = 255*255*3;
 		int dr,dg,db,ds;
@@ -27,12 +27,12 @@ public class ColorIdentifier {
 			dr = colors[i][0] - r;
 			dg = colors[i][1] - g;
 			db = colors[i][2] - b;
-			ds = dr*dr + dg*dg + db*db;
-			if (min==-1 || ds<minlsr) {
+			ds = dr*dr + dg*dg + db*db;//squares differences
+			if (min==-1 || ds<minlsr) {//decides if this squared difference is smaller
 				min = i;
 				minlsr = ds;
 			}
 		}
-		return min;
+		return min;// Returns the index of the closest color
 	}
 }

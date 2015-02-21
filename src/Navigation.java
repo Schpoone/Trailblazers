@@ -7,12 +7,12 @@ import java.util.LinkedList;
 public class Navigation {
 	public static void main(String args[]) throws IOException {
 		int[] nodes = {
-			0,12,19
+				0,12,19
 		};
-		
+
 		// Get paths
 		LinkedList<Integer> path = getPath(nodes);
-		
+
 		// Write paths
 		FileWriter fout = new FileWriter(new File("Path.txt"));
 		int node,prev=0,dir,len;
@@ -20,9 +20,20 @@ public class Navigation {
 		for (int i=0; i<path.size(); i++) {
 			node = path.get(i);
 			if (i==0) dir = 0;
-			else dir = (node==graph[prev][2]) ? 0 : ((node==graph[prev][1]) ? -1 : 1);
+			else dir = (node==graph[prev][2]) ? 0 : ((node==graph[prev][1]) ? -1 : 1);//dear god no
+			/*else{
+				if(node==graph[prev][2]){
+					dir=0;
+				}else{
+					if(node==graph[prev][1]){
+						dir=-1;
+					}else{
+						dir=1;
+					}
+				}
+			}*/
 			len = graph[node][0];
-			out = node + " " + dir + " " + len + "\n";
+			out = node + " " + dir + " " + len + "\n";// writes the node, the direction and the distance
 			fout.write(out);
 			System.out.print(out);
 			prev = node;
@@ -30,9 +41,9 @@ public class Navigation {
 		fout.flush();
 		fout.close();
 	}
-	
+
 	public static int n = -1;
-	public static int[][] graph = {
+	public static int[][] graph = {//the graph they hardcoded distance, nodes that this node can reach
 		{ 10,   1, n, n, 0 }, // Starting node
 		{100,   2, n, n, 0 },
 		{140,   3, n, n, 0 },
@@ -106,17 +117,17 @@ public class Navigation {
 		{ 10,   n,68, n, 0 },
 		{ 10,  70, n, n, 0 },
 	};
-	
+
 	public static LinkedList<Integer> getPath(int[] nodes) {
 		LinkedList<Integer> path = new LinkedList<Integer>();
 		path.add(nodes[0]);
-		for (int i=0; i<nodes.length-1; i++) {
+		for (int i=0; i<nodes.length-1; i++) {//sets path to be the shortest series of nodes
 			path.addAll(dij(nodes[i],nodes[i+1]));
 		}
 		return path;
 	}
-	
-	public static LinkedList<Integer> dij(int a,int b) {
+
+	public static LinkedList<Integer> dij(int a,int b) {//does djikstras between two nodes
 		LinkedList<Integer> queue = new LinkedList<Integer>();
 		queue.push(a);
 		int[][] table = new int[graph.length][2];
@@ -124,7 +135,7 @@ public class Navigation {
 			table[i][0] = 0;
 			table[i][1] = -1;
 		}
-		
+
 		int node,l,f,r;
 		while (queue.size()>0 && table[b][1]==-1) {
 			node = queue.poll();
@@ -147,14 +158,14 @@ public class Navigation {
 				table[r][1] = node;
 			}
 		}
-		
+
 		LinkedList<Integer> path = new LinkedList<Integer>();
 		int current = b;
 		while (current!=-1 && current!=a) {
 			path.add(0,current);
 			current = table[current][1];
 		}
-		
+
 		return path;
 	}
 

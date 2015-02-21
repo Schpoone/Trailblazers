@@ -4,7 +4,7 @@ public class RestAction extends Action {
 		super(d,Action.REST_ACTION);
 	}
 	
-	public void act(int leftColor,int rightColor) {
+	public void act(int leftColor,int rightColor) {//does nothing
 		trim = 0;
 		throttle = 0;
 		nextAction = this;
