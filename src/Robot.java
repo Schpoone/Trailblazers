@@ -7,9 +7,16 @@ import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.pathfinding.Path;
-
+/**
+ * This represents the physical robot with all of its systems.
+ * @author Jason
+ * 
+ * TODO: Add an I/O class as a field for a Robot (would have getters for all motors and sensors)
+ */
 public class Robot {
 	public static final RobotMap robotMap = new RobotMap("props.properties");
+	
+	public final Drive drive;
 	
 	public final RegulatedMotor leftMotor = getMotor(robotMap.LEFT_MOTOR);
 	public final RegulatedMotor rightMotor = getMotor(robotMap.RIGHT_MOTOR);
@@ -26,6 +33,7 @@ public class Robot {
 	public Robot() {
 		paths = new LinkedList<Path>();
 		isRunning = true;
+		drive = new Drive(leftMotor, rightMotor);
 		// calculate one or more paths here and add them to the queue
 	}
 	
