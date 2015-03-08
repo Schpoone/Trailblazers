@@ -21,10 +21,16 @@ public class Robot {
 	
 	private final Queue<Path> paths;
 	private Path curPath;
+	private boolean isRunning;
 	
 	public Robot() {
 		paths = new LinkedList<Path>();
+		isRunning = true;
 		// calculate one or more paths here and add them to the queue
+	}
+	
+	public boolean isRunning() {
+		return isRunning;
 	}
 
 	/**
