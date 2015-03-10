@@ -1,6 +1,9 @@
+import path.DirectedGridMesh;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.robotics.mapping.LineMap;
+import lejos.robotics.pathfinding.AstarSearchAlgorithm;
+import lejos.robotics.pathfinding.NodePathFinder;
 import lejos.robotics.pathfinding.ShortestPathFinder;
 
 /**
@@ -21,12 +24,12 @@ public class RobotMap {
 	/**
 	 * a map of the course
 	 */
-	public final LineMap MAP;
+	public final DirectedGridMesh MAP;
 
 	/**
 	 * a path finder that uses MAP to find a path between two nodes
 	 */
-	public final ShortestPathFinder PATHFINDER;
+	public final NodePathFinder PATHFINDER;
 	
 	
 	
@@ -77,7 +80,7 @@ public class RobotMap {
 	public RobotMap(String input) {
 		this.NODES = new int[]{-1,-1,-1,-1}; // TODO: fix values
 		this.MAP = makeMap(); // TODO: implement this or something
-		this.PATHFINDER = new ShortestPathFinder(MAP);
+		this.PATHFINDER = new NodePathFinder(new AstarSearchAlgorithm(), MAP);
 		
 		this.LEFT_MOTOR = 'A'; // Change pls
 		this.RIGHT_MOTOR = 'A'; // Change pls
@@ -88,8 +91,8 @@ public class RobotMap {
 		this.GYROSCOPE = SensorPort.S1; // Change pls
 	}
 	
-	public LineMap makeMap() {
-		// TODO: implement
+	public DirectedGridMesh makeMap() {
+		
 		return null;
 	}
 }
