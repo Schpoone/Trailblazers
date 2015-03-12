@@ -17,13 +17,15 @@ public class Robot {
 	public static final RobotMap robotMap = new RobotMap("props.properties");
 	
 	public final Drive drive;
+	public final IO io;
 	
 	public final RegulatedMotor leftMotor = getMotor(robotMap.LEFT_MOTOR);
 	public final RegulatedMotor rightMotor = getMotor(robotMap.RIGHT_MOTOR);
+	public final RegulatedMotor sanicMotor = getMotor(robotMap.ULTRASONIC_MOTOR);
 	
 	public final EV3ColorSensor leftColor = new EV3ColorSensor(robotMap.LEFT_COLOR);
 	public final EV3ColorSensor rightColor = new EV3ColorSensor(robotMap.RIGHT_COLOR);
-	public final EV3UltrasonicSensor ultra = new EV3UltrasonicSensor(robotMap.ULTRASONIC);
+	public final EV3UltrasonicSensor sanic = new EV3UltrasonicSensor(robotMap.ULTRASONIC);
 	public final EV3GyroSensor gyro = new EV3GyroSensor(robotMap.GYROSCOPE);
 	
 	private final Queue<Path> paths;
@@ -31,9 +33,10 @@ public class Robot {
 	private boolean isRunning;
 	
 	public Robot() {
-		paths = new LinkedList<Path>();
-		isRunning = true;
-		drive = new Drive(leftMotor, rightMotor);
+		this.paths = new LinkedList<Path>();
+		this.isRunning = true;
+		this.drive = new Drive(leftMotor, rightMotor);
+		this.io = new IO(sanic, leftColor, rightColor, gyro, sanicMotor);
 		// calculate one or more paths here and add them to the queue
 	}
 	

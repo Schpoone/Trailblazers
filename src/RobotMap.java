@@ -46,6 +46,10 @@ public class RobotMap {
 	 */
 	public final char RIGHT_MOTOR;
 	
+	/**
+	 * the motor port for the motor that controls the ultrasonic sensor
+	 */
+	public final char ULTRASONIC_MOTOR;
 	
 	
 	//================================ Sensors ================================
@@ -84,6 +88,7 @@ public class RobotMap {
 		
 		this.LEFT_MOTOR = 'A'; // Change pls
 		this.RIGHT_MOTOR = 'A'; // Change pls
+		this.ULTRASONIC_MOTOR = 'A'; // Change pls
 		
 		this.LEFT_COLOR = SensorPort.S1; // Change pls
 		this.RIGHT_COLOR = SensorPort.S1; // Change pls
