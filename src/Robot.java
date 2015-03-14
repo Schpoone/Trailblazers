@@ -19,6 +19,12 @@ public class Robot {
 	public final EV3UltrasonicSensor ultra = new EV3UltrasonicSensor(robotMap.ULTRASONIC);
 	public final EV3GyroSensor gyro = new EV3GyroSensor(robotMap.GYROSCOPE);
 	
+	private int clrlt;
+	private int clrrt;
+	private float distanceCM;
+	private float rate;
+	private float angle;
+	
 	private final Queue<Path> paths;
 	private Path curPath;
 	
@@ -34,12 +40,29 @@ public class Robot {
 		curPath = paths.remove();
 		while(!curPath.isEmpty()) { // currently assuming empty path == done
 			// read from sensors and such
-	
+			clrlt = leftColor.getColorID();
+			clrrt = rightColor.getColorID();
+			
+			float[] store = new float[2];
+			
+			ultra.getDistanceMode().fetchSample(store, 0);
+			distanceCM = 100*store[0];
+			
+			gyro.getAngleAndRateMode().fetchSample(store, 0);
+			rate = store[0];
+			angle = store[1];
+			
 			// calculate what the robot should do next
 			
 			// act on calculation
 			
 			// maybe wait a bit
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		// if the next path wasn't calculated, calculate it here
 	}
@@ -60,9 +83,10 @@ public class Robot {
 		case 'D':
 			return Motor.D;
 		default:
-			System.out.println("Motor is null");
+			System.out.println("Tried to read motor " + motor + ", but can't find a match.");
 			return null;
 		}
 	}
+	
 	
 }
