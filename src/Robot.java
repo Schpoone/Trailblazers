@@ -15,31 +15,31 @@ import lejos.robotics.pathfinding.Path;
  */
 public class Robot {
 	public static final RobotMap robotMap = new RobotMap("props.properties");
-	
-	public final Drive drive;
+
+	public final MotorPair drive;
 	public final IO io;
-	
+
 	public final RegulatedMotor leftMotor = getMotor(robotMap.LEFT_MOTOR);
 	public final RegulatedMotor rightMotor = getMotor(robotMap.RIGHT_MOTOR);
 	public final RegulatedMotor sanicMotor = getMotor(robotMap.ULTRASONIC_MOTOR);
-	
+
 	public final EV3ColorSensor leftColor = new EV3ColorSensor(robotMap.LEFT_COLOR);
 	public final EV3ColorSensor rightColor = new EV3ColorSensor(robotMap.RIGHT_COLOR);
 	public final EV3UltrasonicSensor sanic = new EV3UltrasonicSensor(robotMap.ULTRASONIC);
 	//public final EV3GyroSensor gyro = new EV3GyroSensor(robotMap.GYROSCOPE);
-	
+
 	private final Queue<Path> paths;
 	private Path curPath;
 	private boolean isRunning;
-	
+
 	public Robot() {
 		this.paths = new LinkedList<Path>();
 		this.isRunning = true;
-		this.drive = new Drive(leftMotor, rightMotor);
+		this.drive = new MotorPair(leftMotor, rightMotor);
 		this.io = new IO(sanic, leftColor, rightColor, null, sanicMotor);
 		// calculate one or more paths here and add them to the queue
 	}
-	
+
 	public boolean isRunning() {
 		return isRunning;
 	}
@@ -51,29 +51,27 @@ public class Robot {
 		/*curPath = paths.remove();
 		while(!curPath.isEmpty()) { // currently assuming empty path == done
 			// read from sensors and such
-	
+
 			// calculate what the robot should do next
-			
+
 			// act on calculation
-			
+
 			// maybe wait a bit
 		}*/
 		// if the next path wasn't calculated, calculate it here
-		this.leftMotor.setSpeed(50);
-		this.rightMotor.setSpeed(50);
-		this.leftMotor.forward();
-		this.rightMotor.backward();
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			this.leftMotor.setSpeed(0);
-			this.rightMotor.setSpeed(0);
+		this.leftMotor.setSpeed(740);
+		this.rightMotor.setSpeed(740);
+		long endTime = System.currentTimeMillis() + 5000;
+		while(System.currentTimeMillis() < endTime) {
+			this.leftMotor.forward();
+			this.rightMotor.backward();
+			System.out.println("Running");
 		}
+		this.leftMotor.stop();
+		this.rightMotor.stop();
+
 	}
-	
+
 	/**
 	 * gets a motor based on a given port
 	 * @param motor the motor's port
@@ -94,5 +92,5 @@ public class Robot {
 			return null;
 		}
 	}
-	
+
 }

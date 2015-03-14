@@ -6,6 +6,7 @@ public class Main {
 		eve = new Robot();
 		//while (eve.isRunning()){
 			eve.runPath();
+			System.out.println("Main");
 		//}
 	}
 	
