@@ -87,13 +87,13 @@ public class RobotMap {
 		this.PATHFINDER = new NodePathFinder(new AstarSearchAlgorithm(), MAP);
 		
 		this.LEFT_MOTOR = 'A'; // Change pls
-		this.RIGHT_MOTOR = 'A'; // Change pls
-		this.ULTRASONIC_MOTOR = 'A'; // Change pls
+		this.RIGHT_MOTOR = 'B'; // Change pls
+		this.ULTRASONIC_MOTOR = 'D'; // Change pls
 		
 		this.LEFT_COLOR = SensorPort.S1; // Change pls
-		this.RIGHT_COLOR = SensorPort.S1; // Change pls
-		this.ULTRASONIC = SensorPort.S1; // Change pls
-		this.GYROSCOPE = SensorPort.S1; // Change pls
+		this.RIGHT_COLOR = SensorPort.S4; // Change pls
+		this.ULTRASONIC = SensorPort.S2; // Change pls
+		this.GYROSCOPE = SensorPort.S3; // Change pls
 	}
 	
 	public DirectedGridMesh makeMap() {

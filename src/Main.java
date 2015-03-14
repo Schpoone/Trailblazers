@@ -4,9 +4,9 @@ public class Main {
 	
 	public static void main(String[] args) {
 		eve = new Robot();
-		while (eve.isRunning()){
+		//while (eve.isRunning()){
 			eve.runPath();
-		}
+		//}
 	}
 	
 }

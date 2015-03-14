@@ -26,7 +26,7 @@ public class Robot {
 	public final EV3ColorSensor leftColor = new EV3ColorSensor(robotMap.LEFT_COLOR);
 	public final EV3ColorSensor rightColor = new EV3ColorSensor(robotMap.RIGHT_COLOR);
 	public final EV3UltrasonicSensor sanic = new EV3UltrasonicSensor(robotMap.ULTRASONIC);
-	public final EV3GyroSensor gyro = new EV3GyroSensor(robotMap.GYROSCOPE);
+	//public final EV3GyroSensor gyro = new EV3GyroSensor(robotMap.GYROSCOPE);
 	
 	private final Queue<Path> paths;
 	private Path curPath;
@@ -36,7 +36,7 @@ public class Robot {
 		this.paths = new LinkedList<Path>();
 		this.isRunning = true;
 		this.drive = new Drive(leftMotor, rightMotor);
-		this.io = new IO(sanic, leftColor, rightColor, gyro, sanicMotor);
+		this.io = new IO(sanic, leftColor, rightColor, null, sanicMotor);
 		// calculate one or more paths here and add them to the queue
 	}
 	
@@ -48,7 +48,7 @@ public class Robot {
 	 * main loop of the robot, runs once per path
 	 */
 	public void runPath() {
-		curPath = paths.remove();
+		/*curPath = paths.remove();
 		while(!curPath.isEmpty()) { // currently assuming empty path == done
 			// read from sensors and such
 	
@@ -57,8 +57,21 @@ public class Robot {
 			// act on calculation
 			
 			// maybe wait a bit
-		}
+		}*/
 		// if the next path wasn't calculated, calculate it here
+		this.leftMotor.setSpeed(50);
+		this.rightMotor.setSpeed(50);
+		this.leftMotor.forward();
+		this.rightMotor.backward();
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			this.leftMotor.setSpeed(0);
+			this.rightMotor.setSpeed(0);
+		}
 	}
 	
 	/**

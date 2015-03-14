@@ -23,7 +23,7 @@ public class IO {
 		this.sanic = sanic;
 		this.leftColor = left;
 		this.rightColor = right;
-		this.gyro = gyro;
+		//this.gyro = gyro;
 		this.sanicMotor = sonicMotor;
 		initSensors();
 	}
@@ -33,7 +33,7 @@ public class IO {
 	 */
 	private void initSensors() {
 		sanic.enable();
-		gyro.reset();
+		//gyro.reset();
 	}
 	
 	/**
