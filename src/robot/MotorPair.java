@@ -23,7 +23,7 @@ public class MotorPair {
 	private int oldDirRight;
 	private boolean stopRight;
 	private boolean stopLeft;
-	
+
 	private boolean speedLeftChanged;
 	private boolean speedRightChanged;
 	private boolean dirLeftChanged;
@@ -56,6 +56,8 @@ public class MotorPair {
 		Thread ltMotorThread = new Thread("Left Motor Thread") {
 			@Override
 			public void run() {
+				if(stopLeft)
+					leftMotor.stop();
 				if(speedLeftChanged)
 					leftMotor.setSpeed(speedLeft);
 				if(dirLeftChanged)
@@ -64,14 +66,14 @@ public class MotorPair {
 					} else {
 						leftMotor.backward();
 					}
-				if(stopLeft)
-					leftMotor.stop();
 			}
 		};
-		
+
 		Thread rtMotorThread = new Thread("Right Motor Thread") {
 			@Override
 			public void run() {
+				if(stopRight)
+					rightMotor.stop();
 				if(speedRightChanged)
 					rightMotor.setSpeed(speedRight);
 				if(dirRightChanged)
@@ -80,11 +82,9 @@ public class MotorPair {
 					} else {
 						rightMotor.backward();
 					}
-				if(stopRight)
-					rightMotor.stop();
 			}
 		};
-		
+
 		ltMotorThread.run();
 		rtMotorThread.run();
 	}
@@ -167,7 +167,7 @@ public class MotorPair {
 		dirRight = dir;
 		dirLeftChanged = oldDirRight == dirRight;
 	}
-	
+
 	/**
 	 * sets the direction of the left motor
 	 * @param dir the new direction, where 1 is forward and -1 is backward
@@ -280,7 +280,7 @@ public class MotorPair {
 			stopRight();
 		speedRightChanged = oldSpeedRight == speedRight;
 	}
-	
+
 	/**
 	 * This method, when called, drives the robot forward at the specified speed
 	 * 
@@ -293,7 +293,7 @@ public class MotorPair {
 		setSpeed(speed);
 		goForward();
 	}
-	
+
 	/**
 	 * This method, when called, drives the robot backward at the specified speed
 	 * 
@@ -306,7 +306,7 @@ public class MotorPair {
 		setSpeed(speed);
 		goBackward();
 	}
-	
+
 	/**
 	 * The right motor would move at max speed and the left motor would move less
 	 * Increasing the concavity increases the difference between the speeds
@@ -320,7 +320,7 @@ public class MotorPair {
 		setSpeedLeft((int) (rightMotor.getSpeed() - rightMotor.getSpeed()*concavity));
 		goForward();
 	}
-	
+
 	/**
 	 * The left motor would move at max speed and the right motor would move less
 	 * Increasing the concavity increases the difference between the speeds
@@ -334,7 +334,7 @@ public class MotorPair {
 		setSpeedRight((int) (leftMotor.getSpeed() - leftMotor.getSpeed()*concavity));
 		goForward();
 	}
-	
+
 	/**
 	 * The right motor would move at max speed and the left motor would move less
 	 * Increasing the concavity increases the difference between the speeds
@@ -348,7 +348,7 @@ public class MotorPair {
 		setSpeedLeft((int) (rightMotor.getSpeed() - rightMotor.getSpeed()*concavity));
 		goBackward();
 	}
-	
+
 	/**
 	 * The left motor would move at max speed and the right motor would move less
 	 * Increasing the concavity increases the difference between the speeds

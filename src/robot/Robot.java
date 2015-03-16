@@ -22,6 +22,7 @@ public class Robot {
 	public static final RegulatedMotor leftMotor = getMotor(robotMap.LEFT_MOTOR);
 	public static final RegulatedMotor rightMotor = getMotor(robotMap.RIGHT_MOTOR);
 	public static final RegulatedMotor sanicMotor = getMotor(robotMap.ULTRASONIC_MOTOR);
+<<<<<<< HEAD:src/robot/Robot.java
 
 	public static final EV3ColorSensor leftColor = new EV3ColorSensor(robotMap.LEFT_COLOR);
 	public static final EV3ColorSensor rightColor = new EV3ColorSensor(robotMap.RIGHT_COLOR);
@@ -32,20 +33,36 @@ public class Robot {
 	public static final MotorPair drive = new MotorPair(leftMotor, rightMotor);
 	public static final IO io = new IO();
 	public static final Audio audio = new Audio();
+=======
+
+	public static final EV3ColorSensor leftColor = new EV3ColorSensor(robotMap.LEFT_COLOR);
+	public static final EV3ColorSensor rightColor = new EV3ColorSensor(robotMap.RIGHT_COLOR);
+
+	public static final EV3UltrasonicSensor ultra = new EV3UltrasonicSensor(robotMap.ULTRASONIC);
+	public static final EV3GyroSensor gyro = new EV3GyroSensor(robotMap.GYROSCOPE);
+>>>>>>> 751c89b05abf7c311741dc72144723c6cf506ea5:src/Robot.java
 	
+	public static final MotorPair drive = new MotorPair(leftMotor, rightMotor);
+	public static final IO io = new IO(ultra, leftColor, rightColor, gyro, sanicMotor);
+	public static final Audio audio = new Audio();
+
 	private int clrlt;
 	private int clrrt;
 	private float distanceCM;
 	private float rate;
 	private float angle;
-	
+
 	private final Queue<Path> paths;
 	private Path curPath;
 	private boolean isRunning;
 
 	public Robot() {
 		this.paths = new LinkedList<Path>();
+<<<<<<< HEAD:src/robot/Robot.java
 		this.isRunning = true;
+=======
+		this.isRunning = true;		
+>>>>>>> 751c89b05abf7c311741dc72144723c6cf506ea5:src/Robot.java
 		// calculate one or more paths here and add them to the queue
 	}
 
@@ -63,17 +80,16 @@ public class Robot {
 
 			clrlt = leftColor.getColorID();
 			clrrt = rightColor.getColorID();
-			
+
 			float[] store = new float[2];
-			
+
 			ultra.getDistanceMode().fetchSample(store, 0);
 			distanceCM = 100*store[0];
-			
+
 			gyro.getAngleAndRateMode().fetchSample(store, 0);
 			rate = store[0];
 			angle = store[1];
-			
-			audio.call();
+
 			// calculate what the robot should do next
 
 			// act on calculation
@@ -88,13 +104,6 @@ public class Robot {
 		}
 
 		// if the next path wasn't calculated, calculate it here
-		this.drive.driveForward(1);
-		long endTime = System.currentTimeMillis() + 5000;
-		while(System.currentTimeMillis() < endTime) {
-			this.drive.forward();
-			System.out.println("Running");
-		}
-		this.drive.stop();
 
 	}
 
