@@ -17,36 +17,33 @@ import lejos.robotics.pathfinding.Path;
 public class Robot {
 	public static final RobotMap robotMap = new RobotMap("props.properties");
 
-	public final MotorPair drive;
-	public final IO io;
-	public final Audio audio;
+	public static final RegulatedMotor leftMotor = getMotor(robotMap.LEFT_MOTOR);
+	public static final RegulatedMotor rightMotor = getMotor(robotMap.RIGHT_MOTOR);
+	public static final RegulatedMotor sanicMotor = getMotor(robotMap.ULTRASONIC_MOTOR);
 
-	public final RegulatedMotor leftMotor = getMotor(robotMap.LEFT_MOTOR);
-	public final RegulatedMotor rightMotor = getMotor(robotMap.RIGHT_MOTOR);
-	public final RegulatedMotor sanicMotor = getMotor(robotMap.ULTRASONIC_MOTOR);
+	public static final EV3ColorSensor leftColor = new EV3ColorSensor(robotMap.LEFT_COLOR);
+	public static final EV3ColorSensor rightColor = new EV3ColorSensor(robotMap.RIGHT_COLOR);
 
-	public final EV3ColorSensor leftColor = new EV3ColorSensor(robotMap.LEFT_COLOR);
-	public final EV3ColorSensor rightColor = new EV3ColorSensor(robotMap.RIGHT_COLOR);
-
-	public final EV3UltrasonicSensor ultra = new EV3UltrasonicSensor(robotMap.ULTRASONIC);
-	public final EV3GyroSensor gyro = new EV3GyroSensor(robotMap.GYROSCOPE);
+	public static final EV3UltrasonicSensor ultra = new EV3UltrasonicSensor(robotMap.ULTRASONIC);
+	public static final EV3GyroSensor gyro = new EV3GyroSensor(robotMap.GYROSCOPE);
 	
+	public static final MotorPair drive = new MotorPair(leftMotor, rightMotor);
+	public static final IO io = new IO(ultra, leftColor, rightColor, gyro, sanicMotor);
+	public static final Audio audio = new Audio();
+
 	private int clrlt;
 	private int clrrt;
 	private float distanceCM;
 	private float rate;
 	private float angle;
-	
+
 	private final Queue<Path> paths;
 	private Path curPath;
 	private boolean isRunning;
 
 	public Robot() {
 		this.paths = new LinkedList<Path>();
-		this.isRunning = true;
-		this.drive = new MotorPair(leftMotor, rightMotor);
-		this.io = new IO(ultra, leftColor, rightColor, null, sanicMotor);
-		audio = new Audio();
+		this.isRunning = true;		
 		// calculate one or more paths here and add them to the queue
 	}
 
@@ -58,23 +55,22 @@ public class Robot {
 	 * main loop of the robot, runs once per path
 	 */
 	public void runPath() {
-		/*curPath = paths.remove();
+		curPath = paths.remove();
 		while(!curPath.isEmpty()) { // currently assuming empty path == done
 			// read from sensors and such
 
 			clrlt = leftColor.getColorID();
 			clrrt = rightColor.getColorID();
-			
+
 			float[] store = new float[2];
-			
+
 			ultra.getDistanceMode().fetchSample(store, 0);
 			distanceCM = 100*store[0];
-			
+
 			gyro.getAngleAndRateMode().fetchSample(store, 0);
 			rate = store[0];
 			angle = store[1];
-			
-			audio.call();
+
 			// calculate what the robot should do next
 
 			// act on calculation
@@ -86,16 +82,9 @@ public class Robot {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}*/
+		}
 
 		// if the next path wasn't calculated, calculate it here
-		this.drive.driveForward(1);
-		long endTime = System.currentTimeMillis() + 5000;
-		while(System.currentTimeMillis() < endTime) {
-			this.drive.forward();
-			System.out.println("Running");
-		}
-		this.drive.stop();
 
 	}
 
@@ -104,7 +93,7 @@ public class Robot {
 	 * @param motor the motor's port
 	 * @return the corresponding motor object
 	 */
-	private RegulatedMotor getMotor(char motor) {
+	private static RegulatedMotor getMotor(char motor) {
 		switch(motor) {
 		case 'A':
 			return Motor.A;
