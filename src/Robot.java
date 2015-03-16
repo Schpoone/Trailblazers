@@ -55,7 +55,7 @@ public class Robot {
 	 * main loop of the robot, runs once per path
 	 */
 	public void runPath() {
-		curPath = paths.remove();
+		/*curPath = paths.remove();
 		while(!curPath.isEmpty()) { // currently assuming empty path == done
 			// read from sensors and such
 
@@ -83,7 +83,7 @@ public class Robot {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+		}*/
 
 		// if the next path wasn't calculated, calculate it here
 		this.drive.driveForward(1);
