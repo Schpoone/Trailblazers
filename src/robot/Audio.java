@@ -1,3 +1,4 @@
+package robot;
 import java.io.File;
 
 import lejos.hardware.Sound;

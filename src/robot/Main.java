@@ -1,3 +1,4 @@
+package robot;
 
 public class Main {
 	public static Robot eve;

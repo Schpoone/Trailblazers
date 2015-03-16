@@ -1,3 +1,4 @@
+package robot;
 import path.DirectedGridMesh;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;

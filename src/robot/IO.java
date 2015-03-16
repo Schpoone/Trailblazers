@@ -1,3 +1,4 @@
+package robot;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
@@ -19,12 +20,7 @@ public class IO {
 	
 	protected RegulatedMotor sanicMotor;
 	
-	public IO(EV3UltrasonicSensor sanic, EV3ColorSensor left, EV3ColorSensor right, EV3GyroSensor gyro, RegulatedMotor sonicMotor) {
-		this.sanic = sanic;
-		this.leftColor = left;
-		this.rightColor = right;
-		//this.gyro = gyro;
-		this.sanicMotor = sonicMotor;
+	public IO() {
 		initSensors();
 	}
 	
@@ -32,8 +28,8 @@ public class IO {
 	 * This method turns on all of the sensors
 	 */
 	private void initSensors() {
-		sanic.enable();
-		//gyro.reset();
+		Robot.ultra.enable();
+		Robot.gyro.reset();
 	}
 	
 	/**
@@ -42,7 +38,7 @@ public class IO {
 	 */
 	public int getSanicDistance() {
 		float[] arr = new float[1];
-		sanic.getDistanceMode().fetchSample(arr, 0);
+		Robot.ultra.getDistanceMode().fetchSample(arr, 0);
 		return (int) arr[0]*100;
 	}
 	
@@ -51,7 +47,7 @@ public class IO {
 	 * @return an int that matches the IDs of a color
 	 */
 	public int getLeftColor() {
-		return leftColor.getColorID();
+		return Robot.leftColor.getColorID();
 	}
 	
 	/**
@@ -59,7 +55,7 @@ public class IO {
 	 * @return an int that matches the IDs of a color
 	 */
 	public int getRightColor() {
-		return rightColor.getColorID();
+		return Robot.rightColor.getColorID();
 	}
 	
 	/**
@@ -68,8 +64,8 @@ public class IO {
 	 * @param right sets the state of the right color sensor, true mean on
 	 */
 	public void setFloodlights(boolean left, boolean right) {
-		leftColor.setFloodlight(left);
-		rightColor.setFloodlight(right);
+		Robot.leftColor.setFloodlight(left);
+		Robot.rightColor.setFloodlight(right);
 	}
 	
 	/**
@@ -78,7 +74,7 @@ public class IO {
 	 */
 	public int getGyroAngle() {
 		float[] arr = new float[1];
-		gyro.getAngleMode().fetchSample(arr, 0);
+		Robot.gyro.getAngleMode().fetchSample(arr, 0);
 		return (int) arr[0];
 	}
 	
@@ -88,7 +84,7 @@ public class IO {
 	 */
 	public int getGyroAngVel() {
 		float[] arr = new float[1];
-		gyro.getRateMode().fetchSample(arr, 0);
+		Robot.gyro.getRateMode().fetchSample(arr, 0);
 		return (int) arr[0];
 	}
 	

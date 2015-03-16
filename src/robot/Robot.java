@@ -1,3 +1,4 @@
+package robot;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -15,21 +16,22 @@ import lejos.robotics.pathfinding.Path;
  * TODO: Add an I/O class as a field for a Robot (would have getters for all motors and sensors)
  */
 public class Robot {
+	
 	public static final RobotMap robotMap = new RobotMap("props.properties");
 
-	public final MotorPair drive;
-	public final IO io;
-	public final Audio audio;
+	public static final RegulatedMotor leftMotor = getMotor(robotMap.LEFT_MOTOR);
+	public static final RegulatedMotor rightMotor = getMotor(robotMap.RIGHT_MOTOR);
+	public static final RegulatedMotor sanicMotor = getMotor(robotMap.ULTRASONIC_MOTOR);
 
-	public final RegulatedMotor leftMotor = getMotor(robotMap.LEFT_MOTOR);
-	public final RegulatedMotor rightMotor = getMotor(robotMap.RIGHT_MOTOR);
-	public final RegulatedMotor sanicMotor = getMotor(robotMap.ULTRASONIC_MOTOR);
+	public static final EV3ColorSensor leftColor = new EV3ColorSensor(robotMap.LEFT_COLOR);
+	public static final EV3ColorSensor rightColor = new EV3ColorSensor(robotMap.RIGHT_COLOR);
 
-	public final EV3ColorSensor leftColor = new EV3ColorSensor(robotMap.LEFT_COLOR);
-	public final EV3ColorSensor rightColor = new EV3ColorSensor(robotMap.RIGHT_COLOR);
-
-	public final EV3UltrasonicSensor ultra = new EV3UltrasonicSensor(robotMap.ULTRASONIC);
-	public final EV3GyroSensor gyro = new EV3GyroSensor(robotMap.GYROSCOPE);
+	public static final EV3UltrasonicSensor ultra = new EV3UltrasonicSensor(robotMap.ULTRASONIC);
+	public static final EV3GyroSensor gyro = new EV3GyroSensor(robotMap.GYROSCOPE);
+	
+	public static final MotorPair drive = new MotorPair(leftMotor, rightMotor);
+	public static final IO io = new IO();
+	public static final Audio audio = new Audio();
 	
 	private int clrlt;
 	private int clrrt;
@@ -44,9 +46,6 @@ public class Robot {
 	public Robot() {
 		this.paths = new LinkedList<Path>();
 		this.isRunning = true;
-		this.drive = new MotorPair(leftMotor, rightMotor);
-		this.io = new IO(ultra, leftColor, rightColor, null, sanicMotor);
-		audio = new Audio();
 		// calculate one or more paths here and add them to the queue
 	}
 
@@ -104,7 +103,7 @@ public class Robot {
 	 * @param motor the motor's port
 	 * @return the corresponding motor object
 	 */
-	private RegulatedMotor getMotor(char motor) {
+	private static RegulatedMotor getMotor(char motor) {
 		switch(motor) {
 		case 'A':
 			return Motor.A;
