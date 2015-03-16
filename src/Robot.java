@@ -7,6 +7,7 @@ import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.pathfinding.Path;
+
 /**
  * This represents the physical robot with all of its systems.
  * @author Jason
@@ -18,6 +19,7 @@ public class Robot {
 
 	public final MotorPair drive;
 	public final IO io;
+	public final Audio audio;
 
 	public final RegulatedMotor leftMotor = getMotor(robotMap.LEFT_MOTOR);
 	public final RegulatedMotor rightMotor = getMotor(robotMap.RIGHT_MOTOR);
@@ -44,6 +46,7 @@ public class Robot {
 		this.isRunning = true;
 		this.drive = new MotorPair(leftMotor, rightMotor);
 		this.io = new IO(ultra, leftColor, rightColor, null, sanicMotor);
+		audio = new Audio();
 		// calculate one or more paths here and add them to the queue
 	}
 
@@ -71,7 +74,7 @@ public class Robot {
 			rate = store[0];
 			angle = store[1];
 			
-
+			audio.call();
 			// calculate what the robot should do next
 
 			// act on calculation
