@@ -4,9 +4,10 @@ public class Main {
 	
 	public static void main(String[] args) {
 		eve = new Robot();
-		for(int i=0;i<3;i++)
+		//while (eve.isRunning()){
 			eve.runPath();
+			System.out.println("Main");
+		//}
 	}
 	
-
 }
