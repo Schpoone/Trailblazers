@@ -4,7 +4,7 @@ import lejos.hardware.Sound;
 
 public class Audio {
 	
-	public Audio(Robot robot) {
+	public void call() {
 		Sound.playSample(new File("wall-e.wav"), Sound.VOL_MAX);
 	}
 	
