@@ -59,16 +59,13 @@ public class Robot {
 			// maybe wait a bit
 		}*/
 		// if the next path wasn't calculated, calculate it here
-		this.leftMotor.setSpeed(740);
-		this.rightMotor.setSpeed(740);
+		this.drive.driveForward(1);
 		long endTime = System.currentTimeMillis() + 5000;
 		while(System.currentTimeMillis() < endTime) {
-			this.leftMotor.forward();
-			this.rightMotor.backward();
+			this.drive.forward();
 			System.out.println("Running");
 		}
-		this.leftMotor.stop();
-		this.rightMotor.stop();
+		this.drive.stop();
 
 	}
 
