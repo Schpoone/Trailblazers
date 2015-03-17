@@ -19,8 +19,10 @@ public class DefaultDriveCommand implements Command {
 	@Override
 	public void execute() {
 		if (Robot.io.getLeftColor() == Color.RED) {
-			
+			Robot.drive.stop();
 		}
+		Robot.drive.setVel((int) speed);
+		Robot.drive.goForward();
 	}
 
 	@Override
