@@ -1,4 +1,4 @@
-package commands;
+package robot.commands;
 
 public interface Command {
 	

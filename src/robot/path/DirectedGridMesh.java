@@ -1,4 +1,4 @@
-package path;
+package robot.path;
 
 import lejos.robotics.mapping.LineMap;
 import lejos.robotics.pathfinding.FourWayGridMesh;

@@ -1,13 +1,13 @@
-package commands;
+package robot.commands;
 
 import lejos.robotics.Color;
 import robot.Robot;
 
 public class DefaultDriveCommand implements Command {
 	
-	private double speed;
+	private int speed;
 	
-	public DefaultDriveCommand(double speed) {
+	public DefaultDriveCommand(int speed) {
 		this.speed = speed;
 	}
 	
@@ -21,7 +21,7 @@ public class DefaultDriveCommand implements Command {
 		if (Robot.io.getLeftColor() == Color.RED) {
 			Robot.drive.stop();
 		}
-		Robot.drive.setVel((int) speed);
+		Robot.drive.setVel(speed);
 		Robot.drive.goForward();
 	}
 
