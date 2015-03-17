@@ -22,7 +22,6 @@ public class Robot {
 	public static final RegulatedMotor leftMotor = getMotor(robotMap.LEFT_MOTOR);
 	public static final RegulatedMotor rightMotor = getMotor(robotMap.RIGHT_MOTOR);
 	public static final RegulatedMotor sanicMotor = getMotor(robotMap.ULTRASONIC_MOTOR);
-<<<<<<< HEAD:src/robot/Robot.java
 
 	public static final EV3ColorSensor leftColor = new EV3ColorSensor(robotMap.LEFT_COLOR);
 	public static final EV3ColorSensor rightColor = new EV3ColorSensor(robotMap.RIGHT_COLOR);
@@ -33,18 +32,7 @@ public class Robot {
 	public static final MotorPair drive = new MotorPair(leftMotor, rightMotor);
 	public static final IO io = new IO();
 	public static final Audio audio = new Audio();
-=======
-
-	public static final EV3ColorSensor leftColor = new EV3ColorSensor(robotMap.LEFT_COLOR);
-	public static final EV3ColorSensor rightColor = new EV3ColorSensor(robotMap.RIGHT_COLOR);
-
-	public static final EV3UltrasonicSensor ultra = new EV3UltrasonicSensor(robotMap.ULTRASONIC);
-	public static final EV3GyroSensor gyro = new EV3GyroSensor(robotMap.GYROSCOPE);
->>>>>>> 751c89b05abf7c311741dc72144723c6cf506ea5:src/Robot.java
 	
-	public static final MotorPair drive = new MotorPair(leftMotor, rightMotor);
-	public static final IO io = new IO(ultra, leftColor, rightColor, gyro, sanicMotor);
-	public static final Audio audio = new Audio();
 
 	private int clrlt;
 	private int clrrt;
@@ -58,11 +46,7 @@ public class Robot {
 
 	public Robot() {
 		this.paths = new LinkedList<Path>();
-<<<<<<< HEAD:src/robot/Robot.java
 		this.isRunning = true;
-=======
-		this.isRunning = true;		
->>>>>>> 751c89b05abf7c311741dc72144723c6cf506ea5:src/Robot.java
 		// calculate one or more paths here and add them to the queue
 	}
 

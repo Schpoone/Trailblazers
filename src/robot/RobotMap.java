@@ -2,10 +2,8 @@ package robot;
 import path.DirectedGridMesh;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
-import lejos.robotics.mapping.LineMap;
 import lejos.robotics.pathfinding.AstarSearchAlgorithm;
 import lejos.robotics.pathfinding.NodePathFinder;
-import lejos.robotics.pathfinding.ShortestPathFinder;
 
 /**
  * Stores all the constants relevant to the robot. 
