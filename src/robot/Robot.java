@@ -6,6 +6,7 @@ import lejos.hardware.motor.Motor;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.robotics.Color;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.pathfinding.Path;
 
@@ -32,22 +33,18 @@ public class Robot {
 	public static final MotorPair drive = new MotorPair(leftMotor, rightMotor);
 	public static final IO io = new IO();
 	public static final Audio audio = new Audio();
-	
-
-	private int clrlt;
-	private int clrrt;
-	private float distanceCM;
-	private float rate;
-	private float angle;
 
 	private final Queue<Path> paths;
 	private Path curPath;
 	private boolean isRunning;
 
 	public Robot() {
+		System.out.println("Robot init start");
 		this.paths = new LinkedList<Path>();
 		this.isRunning = true;
+		drive.start();
 		// calculate one or more paths here and add them to the queue
+		System.out.println("Robot init finish");
 	}
 
 	public boolean isRunning() {
@@ -58,31 +55,18 @@ public class Robot {
 	 * main loop of the robot, runs once per path
 	 */
 	public void runPath() {
-		curPath = paths.remove();
-		while(!curPath.isEmpty()) { // currently assuming empty path == done
-			// read from sensors and such
-
-			clrlt = leftColor.getColorID();
-			clrrt = rightColor.getColorID();
-
-			float[] store = new float[2];
-
-			ultra.getDistanceMode().fetchSample(store, 0);
-			distanceCM = 100*store[0];
-
-			gyro.getAngleAndRateMode().fetchSample(store, 0);
-			rate = store[0];
-			angle = store[1];
-
+		//curPath = paths.remove();
+		while(isRunning) { // currently assuming empty path == done
+			io.read(); // read from sensors
 			// calculate what the robot should do next
 
 			// act on calculation
+			this.defaultDrive(740);
 
 			// maybe wait a bit
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -110,6 +94,25 @@ public class Robot {
 			System.out.println("Tried to read motor " + motor + ", but can't find a match.");
 			return null;
 		}
+	}
+	
+	private void defaultDrive(int speed) {
+		if (Robot.io.getLeftColor() == Color.RED && Robot.io.getRightColor() == Color.RED) {
+			Robot.drive.stop();
+		} else if(Robot.io.getLeftColor() == Color.WHITE) {
+			Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*0.8));
+		} else if(Robot.io.getRightColor() == Color.WHITE) {
+			Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*0.8));
+		} else if(Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
+			Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
+		} else {
+			Robot.drive.setVel(speed);
+			Robot.drive.goForward();
+		}
+	}
+	
+	public void kill() {
+		this.isRunning = false;
 	}
 
 }
