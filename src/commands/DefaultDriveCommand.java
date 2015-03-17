@@ -18,8 +18,17 @@ public class DefaultDriveCommand implements Command {
 
 	@Override
 	public void execute() {
-		if (Robot.io.getLeftColor() == Color.RED) {
+		if (Robot.io.getLeftColor() == Color.RED || Robot.io.getRightColor() == Color.RED) {
 			Robot.drive.stop();
+		}
+		if (Robot.io.getLeftColor() == Color.WHITE) {
+			Robot.drive.setRightVel((int) (Robot.drive.getSpeedRight()*.8));
+		}
+		if (Robot.io.getRightColor() == Color.WHITE) {
+			Robot.drive.setLeftVel((int) (Robot.drive.getSpeedLeft()*.8));
+		}
+		if (Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
+			Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
 		}
 		Robot.drive.setVel((int) speed);
 		Robot.drive.goForward();
