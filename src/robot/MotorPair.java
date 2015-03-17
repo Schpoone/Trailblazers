@@ -259,7 +259,7 @@ public class MotorPair {
 		setSpeedLeft(speed);
 		setSpeedRight(speed);
 	}
-
+	
 	/**
 	 * sets the speed of the left motor and updates the old speed and whether the motor changed
 	 * stops the left motor if the speed is 0
