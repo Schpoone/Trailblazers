@@ -13,6 +13,7 @@ public class MotorPair {
 
 	private RegulatedMotor leftMotor;
 	private RegulatedMotor rightMotor;
+	private boolean started;
 	private int speedRight;
 	private int speedLeft;
 	private int dirLeft;
@@ -46,7 +47,7 @@ public class MotorPair {
 		speedRightChanged = true;
 		dirLeftChanged = true;
 		dirRightChanged = true;
-		initThreads();
+		started = false;
 	}
 
 	/**
@@ -56,37 +57,43 @@ public class MotorPair {
 		Thread ltMotorThread = new Thread("Left Motor Thread") {
 			@Override
 			public void run() {
-				if(stopLeft)
-					leftMotor.stop();
-				if(speedLeftChanged)
-					leftMotor.setSpeed(speedLeft);
-				if(dirLeftChanged)
-					if(dirLeft == 1) {
-						leftMotor.forward();
-					} else {
-						leftMotor.backward();
-					}
+				while(true) {
+					if(stopLeft)
+						leftMotor.stop();
+					if(speedLeftChanged)
+						leftMotor.setSpeed(speedLeft);
+					if(dirLeftChanged)
+						if(dirLeft == 1) {
+							leftMotor.forward();
+						} else {
+							leftMotor.backward();
+						}
+					System.out.println("left");
+				}
 			}
 		};
 
 		Thread rtMotorThread = new Thread("Right Motor Thread") {
 			@Override
 			public void run() {
-				if(stopRight)
-					rightMotor.stop();
-				if(speedRightChanged)
-					rightMotor.setSpeed(speedRight);
-				if(dirRightChanged)
-					if(dirRight == 1) {
-						rightMotor.forward();
-					} else {
-						rightMotor.backward();
-					}
+				while(true) {
+					if(stopRight)
+						rightMotor.stop();
+					if(speedRightChanged)
+						rightMotor.setSpeed(speedRight);
+					if(dirRightChanged)
+						if(dirRight == 1) {
+							rightMotor.forward();
+						} else {
+							rightMotor.backward();
+						}
+					System.out.println("right");
+				}
 			}
 		};
 
-		ltMotorThread.run();
-		rtMotorThread.run();
+		ltMotorThread.start();
+		rtMotorThread.start();
 	}
 
 	/**
@@ -361,6 +368,55 @@ public class MotorPair {
 		setSpeedLeft((int) leftMotor.getMaxSpeed());
 		setSpeedRight((int) (leftMotor.getSpeed() - leftMotor.getSpeed()*concavity));
 		goBackward();
+	}
+
+	/**
+	 * @return the speed of the right motor
+	 */
+	public int getSpeedRight() {
+		return speedRight;
+	}
+
+	/**
+	 * @return the speed of the left motor
+	 */
+	public int getSpeedLeft() {
+		return speedLeft;
+	}
+
+	/**
+	 * @return the direction of the left motor
+	 */
+	public int getDirLeft() {
+		return dirLeft;
+	}
+
+	/**
+	 * @return the direction of the right motor
+	 */
+	public int getDirRight() {
+		return dirRight;
+	}
+
+	/**
+	 * @return whether the right motor is set to stop
+	 */
+	public boolean isStopRight() {
+		return stopRight;
+	}
+
+	/**
+	 * @return whether the left motor is set to stop
+	 */
+	public boolean isStopLeft() {
+		return stopLeft;
+	}
+
+	public void start() {
+		if(!started) {
+			started = true;
+			this.initThreads();
+		}
 	}
 
 }
