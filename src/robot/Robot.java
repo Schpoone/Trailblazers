@@ -37,6 +37,8 @@ public class Robot {
 	private final Queue<Path> paths;
 	private Path curPath;
 	private boolean isRunning;
+	private int leftOwed=0;//how much the robot is facing left compared to how much it should be, measured in calls to defaultdrive
+	private int rightOwed=0;//how much the robot is facing right compared to how much it should be, measured in calls to defaultdrive
 
 	public Robot() {
 		System.out.println("Robot init start");
@@ -101,10 +103,20 @@ public class Robot {
 			Robot.drive.stop();
 		} else if(Robot.io.getLeftColor() == Color.WHITE) {
 			Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*0.8));
+			rightOwed++;
+			leftOwed=0;
 		} else if(Robot.io.getRightColor() == Color.WHITE) {
 			Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*0.8));
+			leftOwed++;
+			rightOwed=0;
 		} else if(Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
 			Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
+		} else if(leftOwed!=0){
+			Robot.drive.turnLeft(.2);
+			leftOwed--;
+		} else if(rightOwed!=0){
+			Robot.drive.turnRight(.2);
+			rightOwed--;
 		} else {
 			Robot.drive.setVel(speed);
 			Robot.drive.goForward();
