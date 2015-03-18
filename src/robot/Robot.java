@@ -112,10 +112,10 @@ public class Robot {
 		} else if(Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
 			Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
 		} else if(leftOwed!=0){
-			Robot.drive.turnLeft(.2);
+			Robot.drive.turnLeft(.1);
 			leftOwed--;
 		} else if(rightOwed!=0){
-			Robot.drive.turnRight(.2);
+			Robot.drive.turnRight(.1);
 			rightOwed--;
 		} else {
 			Robot.drive.setVel(speed);
