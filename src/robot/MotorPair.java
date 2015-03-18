@@ -369,7 +369,35 @@ public class MotorPair {
 		setSpeedRight((int) (leftMotor.getSpeed() - leftMotor.getSpeed()*concavity));
 		goBackward();
 	}
-
+	
+	/**
+	 * This should make the robot turn left while remaining in place
+	 * idk if it will
+	 * 
+	 * @param percentMaxSpeed	percentage of the maximum speed (in the form .50 for 50%)
+	 * @author Robby
+	 */
+	public void turnLeft(double percentMaxSpeed){
+		int speed = (int) (percentMaxSpeed*Math.min(leftMotor.getMaxSpeed(), rightMotor.getMaxSpeed()));
+		setSpeedLeft(-speed);
+		setSpeedRight(speed);
+		goForward();
+	}
+	
+	/**
+	 * This should make the robot turn right while remaining in place
+	 * idk if it will
+	 * 
+	 * @param percentMaxSpeed	percentage of the maximum speed (in the form .50 for 50%)
+	 * @author Robby
+	 */
+	public void turnRight(double percentMaxSpeed){
+		int speed = (int) (percentMaxSpeed*Math.min(leftMotor.getMaxSpeed(), rightMotor.getMaxSpeed()));
+		setSpeedLeft(speed);
+		setSpeedRight(-speed);
+		goForward();
+	}
+	
 	/**
 	 * @return the speed of the right motor
 	 */
