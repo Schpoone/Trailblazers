@@ -24,7 +24,7 @@ public class MotorPair {
 	private int oldDirRight;
 	private boolean stopRight;
 	private boolean stopLeft;
-
+	private final int waitTime=10;
 	private boolean speedLeftChanged;
 	private boolean speedRightChanged;
 	private boolean dirLeftChanged;
@@ -57,7 +57,6 @@ public class MotorPair {
 		Thread ltMotorThread = new Thread("Left Motor Thread") {
 			@Override
 			public void run() {
-				while(true) {
 					if(stopLeft)
 						leftMotor.stop();
 					if(speedLeftChanged)
@@ -69,14 +68,18 @@ public class MotorPair {
 							leftMotor.backward();
 						}
 					System.out.println("left");
-				}
+					try {
+						this.wait(waitTime);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					this.run();
 			}
 		};
 
 		Thread rtMotorThread = new Thread("Right Motor Thread") {
 			@Override
 			public void run() {
-				while(true) {
 					if(stopRight)
 						rightMotor.stop();
 					if(speedRightChanged)
@@ -88,7 +91,12 @@ public class MotorPair {
 							rightMotor.backward();
 						}
 					System.out.println("right");
-				}
+					try {
+						this.wait(waitTime);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					this.run();
 			}
 		};
 
