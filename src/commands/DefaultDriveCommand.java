@@ -2,6 +2,7 @@ package commands;
 
 import lejos.robotics.Color;
 import robot.Robot;
+import robot.commands.Command;
 
 public class DefaultDriveCommand implements Command {
 	
