@@ -20,10 +20,15 @@ public class IO {
 	
 	protected RegulatedMotor sanicMotor;
 	
+	/**
+	 * [ultraDistance (meters),leftColorID (int),rightColorID (int),gyroAngle (degrees),gyroRate (degrees/sec)]
+	 */
 	protected float[] buffer = new float[8];
 	
 	public IO() {
+		System.out.println("IO init start");
 		initSensors();
+		System.out.println("IO init end");
 	}
 	
 	/**
@@ -39,7 +44,6 @@ public class IO {
 	 * @return the distance in centimeters
 	 */
 	public float getSanicDistance() {
-		Robot.ultra.getDistanceMode().fetchSample(buffer, 0);
 		return buffer[0]*100;
 	}
 	
@@ -48,7 +52,7 @@ public class IO {
 	 * @return an int that matches the IDs of a color
 	 */
 	public int getLeftColor() {
-		return Robot.leftColor.getColorID();
+		return (int) buffer[1];
 	}
 	
 	/**
@@ -56,7 +60,7 @@ public class IO {
 	 * @return an int that matches the IDs of a color
 	 */
 	public int getRightColor() {
-		return Robot.rightColor.getColorID();
+		return (int) buffer[2];
 	}
 	
 	/**
@@ -74,8 +78,7 @@ public class IO {
 	 * @return angle in degrees
 	 */
 	public float getGyroAngle() {
-		Robot.gyro.getAngleMode().fetchSample(buffer, 0);
-		return buffer[0];
+		return buffer[3];
 	}
 	
 	/**
@@ -83,8 +86,19 @@ public class IO {
 	 * @return angular velocity in degrees per second
 	 */
 	public float getGyroAngVel() {
-		Robot.gyro.getRateMode().fetchSample(buffer, 0);
-		return buffer[0];
+		return buffer[4];
+	}
+	
+	/**
+	 * reads the values from the sensors into an array [ultraDistance (meters),leftColorID (int),rightColorID (int),gyroAngle (degrees),gyroRate (degrees/sec)]
+	 */
+	public float[] read() {
+		Robot.ultra.getDistanceMode().fetchSample(buffer, 0);
+		Robot.leftColor.getColorIDMode().fetchSample(buffer, 1);
+		Robot.rightColor.getColorIDMode().fetchSample(buffer, 2);
+		Robot.gyro.getAngleMode().fetchSample(buffer, 3);
+		Robot.gyro.getRateMode().fetchSample(buffer, 4);
+		return buffer;
 	}
 	
 	/**

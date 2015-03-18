@@ -1,5 +1,5 @@
 package robot;
-import path.DirectedGridMesh;
+import robot.path.DirectedGridMesh;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.robotics.pathfinding.AstarSearchAlgorithm;
@@ -81,6 +81,7 @@ public class RobotMap {
 	 * @param input the path of the properties file
 	 */
 	public RobotMap(String input) {
+		System.out.println("RobotMap init start");
 		this.NODES = new int[]{-1,-1,-1,-1}; // TODO: fix values
 		this.MAP = makeMap(); // TODO: implement this or something
 		this.PATHFINDER = new NodePathFinder(new AstarSearchAlgorithm(), MAP);
@@ -93,6 +94,7 @@ public class RobotMap {
 		this.RIGHT_COLOR = SensorPort.S4; // Change pls
 		this.ULTRASONIC = SensorPort.S3; // Change pls
 		this.GYROSCOPE = SensorPort.S2; // Change pls
+		System.out.println("RobotMap init end");
 	}
 	
 	public DirectedGridMesh makeMap() {

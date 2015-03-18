@@ -13,6 +13,7 @@ public class MotorPair {
 
 	private RegulatedMotor leftMotor;
 	private RegulatedMotor rightMotor;
+	private boolean started;
 	private int speedRight;
 	private int speedLeft;
 	private int dirLeft;
@@ -23,7 +24,7 @@ public class MotorPair {
 	private int oldDirRight;
 	private boolean stopRight;
 	private boolean stopLeft;
-
+	private final int waitTime=10;
 	private boolean speedLeftChanged;
 	private boolean speedRightChanged;
 	private boolean dirLeftChanged;
@@ -46,7 +47,7 @@ public class MotorPair {
 		speedRightChanged = true;
 		dirLeftChanged = true;
 		dirRightChanged = true;
-		initThreads();
+		started = false;
 	}
 
 	/**
@@ -56,37 +57,51 @@ public class MotorPair {
 		Thread ltMotorThread = new Thread("Left Motor Thread") {
 			@Override
 			public void run() {
-				if(stopLeft)
-					leftMotor.stop();
-				if(speedLeftChanged)
-					leftMotor.setSpeed(speedLeft);
-				if(dirLeftChanged)
-					if(dirLeft == 1) {
-						leftMotor.forward();
-					} else {
-						leftMotor.backward();
+					if(stopLeft)
+						leftMotor.stop();
+					if(speedLeftChanged)
+						leftMotor.setSpeed(speedLeft);
+					if(dirLeftChanged)
+						if(dirLeft == 1) {
+							leftMotor.forward();
+						} else {
+							leftMotor.backward();
+						}
+					System.out.println("left");
+					try {
+						this.wait(waitTime);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
+					this.run();
 			}
 		};
 
 		Thread rtMotorThread = new Thread("Right Motor Thread") {
 			@Override
 			public void run() {
-				if(stopRight)
-					rightMotor.stop();
-				if(speedRightChanged)
-					rightMotor.setSpeed(speedRight);
-				if(dirRightChanged)
-					if(dirRight == 1) {
-						rightMotor.forward();
-					} else {
-						rightMotor.backward();
+					if(stopRight)
+						rightMotor.stop();
+					if(speedRightChanged)
+						rightMotor.setSpeed(speedRight);
+					if(dirRightChanged)
+						if(dirRight == 1) {
+							rightMotor.forward();
+						} else {
+							rightMotor.backward();
+						}
+					System.out.println("right");
+					try {
+						this.wait(waitTime);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
+					this.run();
 			}
 		};
 
-		ltMotorThread.run();
-		rtMotorThread.run();
+		ltMotorThread.start();
+		rtMotorThread.start();
 	}
 
 	/**
@@ -253,14 +268,6 @@ public class MotorPair {
 		setSpeedRight(speed);
 	}
 	
-	public int getSpeedLeft() {
-		return speedLeft;
-	}
-	
-	public int getSpeedRight() {
-		return speedRight;
-	}
-	
 	/**
 	 * sets the speed of the left motor and updates the old speed and whether the motor changed
 	 * stops the left motor if the speed is 0
@@ -369,6 +376,83 @@ public class MotorPair {
 		setSpeedLeft((int) leftMotor.getMaxSpeed());
 		setSpeedRight((int) (leftMotor.getSpeed() - leftMotor.getSpeed()*concavity));
 		goBackward();
+	}
+	
+	/**
+	 * This should make the robot turn left while remaining in place
+	 * idk if it will
+	 * 
+	 * @param percentMaxSpeed	percentage of the maximum speed (in the form .50 for 50%)
+	 * @author Robby
+	 */
+	public void turnLeft(double percentMaxSpeed){
+		int speed = (int) (percentMaxSpeed*Math.min(leftMotor.getMaxSpeed(), rightMotor.getMaxSpeed()));
+		setSpeedLeft(-speed);
+		setSpeedRight(speed);
+		goForward();
+	}
+	
+	/**
+	 * This should make the robot turn right while remaining in place
+	 * idk if it will
+	 * 
+	 * @param percentMaxSpeed	percentage of the maximum speed (in the form .50 for 50%)
+	 * @author Robby
+	 */
+	public void turnRight(double percentMaxSpeed){
+		int speed = (int) (percentMaxSpeed*Math.min(leftMotor.getMaxSpeed(), rightMotor.getMaxSpeed()));
+		setSpeedLeft(speed);
+		setSpeedRight(-speed);
+		goForward();
+	}
+	
+	/**
+	 * @return the speed of the right motor
+	 */
+	public int getSpeedRight() {
+		return speedRight;
+	}
+
+	/**
+	 * @return the speed of the left motor
+	 */
+	public int getSpeedLeft() {
+		return speedLeft;
+	}
+
+	/**
+	 * @return the direction of the left motor
+	 */
+	public int getDirLeft() {
+		return dirLeft;
+	}
+
+	/**
+	 * @return the direction of the right motor
+	 */
+	public int getDirRight() {
+		return dirRight;
+	}
+
+	/**
+	 * @return whether the right motor is set to stop
+	 */
+	public boolean isStopRight() {
+		return stopRight;
+	}
+
+	/**
+	 * @return whether the left motor is set to stop
+	 */
+	public boolean isStopLeft() {
+		return stopLeft;
+	}
+
+	public void start() {
+		if(!started) {
+			started = true;
+			this.initThreads();
+		}
 	}
 
 }
