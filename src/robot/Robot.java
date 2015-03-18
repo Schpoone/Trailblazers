@@ -33,7 +33,9 @@ public class Robot {
 	public static final MotorPair drive = new MotorPair(leftMotor, rightMotor);
 	public static final IO io = new IO();
 	public static final Audio audio = new Audio();
-
+	
+	public static final float collisionThreshold = .05f;//m
+	
 	private final Queue<Path> paths;
 	private Path curPath;
 	private boolean isRunning;

@@ -13,12 +13,16 @@ import lejos.robotics.RegulatedMotor;
 
 public class IO {
 	
-	protected EV3UltrasonicSensor sanic;
-	protected EV3ColorSensor leftColor;
-	protected EV3ColorSensor rightColor;
-	protected EV3GyroSensor gyro;
+	private EV3UltrasonicSensor sanic;
+	private EV3ColorSensor leftColor;
+	private EV3ColorSensor rightColor;
+	private EV3GyroSensor gyro;
 	
-	protected RegulatedMotor sanicMotor;
+	private RegulatedMotor sanicMotor;
+	
+	public static int ANGLE_LEFT = -45;
+	public static int ANGLE_FORWARD = 0;
+	public static int ANGLE_RIGHT = 45;
 	
 	/**
 	 * [ultraDistance (meters),leftColorID (int),rightColorID (int),gyroAngle (degrees),gyroRate (degrees/sec)]
@@ -102,7 +106,11 @@ public class IO {
 	}
 	
 	/**
-	 * I DON'T KNOW HOW TO IMPLEMENT THE SANIC MOTOR
+	 * Turns the ultrasonic sensor to a certain angle where straight ahead is 0
+	 * @param angle that the sensor will be set to, left is negative, right is positive
 	 */
+	public void setSanicAngle(int angle) {
+		sanicMotor.rotateTo(angle);//idk how this works
+	}
 	
 }
