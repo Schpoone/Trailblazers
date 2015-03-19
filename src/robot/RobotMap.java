@@ -42,8 +42,6 @@ public class RobotMap {
 	
 	public final int SPEED;
 	
-	public final static int START=1;
-	
 	public final static MapNode[] MAP=new MapNode[67];
 	
 	//================================ Motors =================================
@@ -85,14 +83,27 @@ public class RobotMap {
 	
 	
 	/**
-	 * read the values for everything, or most everything, form a properties file.
+	 * read the values for eve+rything, or most everything, form a properties file.
 	 * only exception might be the map
 	 * @param input the path of the properties file
 	 */
 	public RobotMap(String input) {
 		System.out.println("RobotMap init start");
 		this.PATH = new int[][]{ // mebbe read from file
-			{0,3,6}
+		/*0-4*/  {0,3,6},{},{},{},{},
+		/*5-9*/  {},{},{},{},{},
+		/*10-14*/{},{},{},{},{},
+		/*15-19*/{},{},{},{},{},
+		/*20-24*/{},{},{},{},{},
+		/*25-29*/{},{},{},{},{},
+		/*30-34*/{},{},{},{},{},
+		/*35-39*/{},{},{},{},{},
+		/*40-44*/{},{},{},{},{},
+		/*45-49*/{},{},{},{},{},
+		/*50-54*/{},{},{},{},{},
+		/*55-59*/{},{},{},{},{},
+		/*60-64*/{},{},{},{},{},
+		/*65-69*/{},{},{},{},{},
 		};
 		this.DIRECTION = 0;
 		this.TYPE = 1;
