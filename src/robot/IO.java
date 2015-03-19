@@ -1,6 +1,5 @@
 package robot;
-import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.EV3UltrasonicSensor;
+
 import lejos.robotics.RegulatedMotor;
 
 /**
