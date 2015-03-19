@@ -44,6 +44,8 @@ public class Robot {
 	private final double correctionFactor = 0.8; // needs to be tested
 	private int nodeIndex = 0;
 	private int[] currentNode;
+	
+	private Thread UltrasonicRunner;
 
 	public Robot() {
 		System.out.println("Robot init start");
