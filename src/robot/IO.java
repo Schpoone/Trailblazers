@@ -1,6 +1,5 @@
 package robot;
 import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.RegulatedMotor;
 
@@ -13,11 +12,6 @@ import lejos.robotics.RegulatedMotor;
 
 public class IO {
 	
-	private EV3UltrasonicSensor sanic;
-	private EV3ColorSensor leftColor;
-	private EV3ColorSensor rightColor;
-	private EV3GyroSensor gyro;
-	
 	private RegulatedMotor sanicMotor;
 	
 	public static int ANGLE_LEFT = -45;
@@ -25,7 +19,7 @@ public class IO {
 	public static int ANGLE_RIGHT = 45;
 	
 	/**
-	 * [ultraDistance (meters),leftColorID (int),rightColorID (int),gyroAngle (degrees),gyroRate (degrees/sec)]
+	 * [ultraDistance (meters),leftColorID (int),rightColorID (int)]
 	 */
 	protected float[] buffer = new float[8];
 	
@@ -40,7 +34,6 @@ public class IO {
 	 */
 	private void initSensors() {
 		Robot.ultra.enable();
-		Robot.gyro.reset();
 	}
 	
 	/**
@@ -100,8 +93,6 @@ public class IO {
 		Robot.ultra.getDistanceMode().fetchSample(buffer, 0);
 		Robot.leftColor.getColorIDMode().fetchSample(buffer, 1);
 		Robot.rightColor.getColorIDMode().fetchSample(buffer, 2);
-		Robot.gyro.getAngleMode().fetchSample(buffer, 3);
-		Robot.gyro.getRateMode().fetchSample(buffer, 4);
 		return buffer;
 	}
 	

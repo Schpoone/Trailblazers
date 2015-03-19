@@ -24,7 +24,6 @@ public class MotorPair {
 	private int oldDirRight;
 	private boolean stopRight;
 	private boolean stopLeft;
-	private final int waitTime=10;
 	private boolean speedLeftChanged;
 	private boolean speedRightChanged;
 	private boolean dirLeftChanged;
@@ -57,6 +56,7 @@ public class MotorPair {
 		Thread ltMotorThread = new Thread("Left Motor Thread") {
 			@Override
 			public void run() {
+				while(true) {
 					if(stopLeft)
 						leftMotor.stop();
 					if(speedLeftChanged)
@@ -67,19 +67,15 @@ public class MotorPair {
 						} else {
 							leftMotor.backward();
 						}
-					System.out.println("left");
-					try {
-						this.wait(waitTime);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					this.run();
+					//System.out.println("left");
+				}
 			}
 		};
 
 		Thread rtMotorThread = new Thread("Right Motor Thread") {
 			@Override
 			public void run() {
+				while(true) {
 					if(stopRight)
 						rightMotor.stop();
 					if(speedRightChanged)
@@ -90,13 +86,8 @@ public class MotorPair {
 						} else {
 							rightMotor.backward();
 						}
-					System.out.println("right");
-					try {
-						this.wait(waitTime);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					this.run();
+					//System.out.println("right");
+				}
 			}
 		};
 
@@ -267,7 +258,7 @@ public class MotorPair {
 		setSpeedLeft(speed);
 		setSpeedRight(speed);
 	}
-	
+
 	/**
 	 * sets the speed of the left motor and updates the old speed and whether the motor changed
 	 * stops the left motor if the speed is 0
@@ -377,35 +368,7 @@ public class MotorPair {
 		setSpeedRight((int) (leftMotor.getSpeed() - leftMotor.getSpeed()*concavity));
 		goBackward();
 	}
-	
-	/**
-	 * This should make the robot turn left while remaining in place
-	 * idk if it will
-	 * 
-	 * @param percentMaxSpeed	percentage of the maximum speed (in the form .50 for 50%)
-	 * @author Robby
-	 */
-	public void turnLeft(double percentMaxSpeed){
-		int speed = (int) (percentMaxSpeed*Math.min(leftMotor.getMaxSpeed(), rightMotor.getMaxSpeed()));
-		setSpeedLeft(-speed);
-		setSpeedRight(speed);
-		goForward();
-	}
-	
-	/**
-	 * This should make the robot turn right while remaining in place
-	 * idk if it will
-	 * 
-	 * @param percentMaxSpeed	percentage of the maximum speed (in the form .50 for 50%)
-	 * @author Robby
-	 */
-	public void turnRight(double percentMaxSpeed){
-		int speed = (int) (percentMaxSpeed*Math.min(leftMotor.getMaxSpeed(), rightMotor.getMaxSpeed()));
-		setSpeedLeft(speed);
-		setSpeedRight(-speed);
-		goForward();
-	}
-	
+
 	/**
 	 * @return the speed of the right motor
 	 */
