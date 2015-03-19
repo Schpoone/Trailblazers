@@ -1,5 +1,6 @@
 package robot;
 import robot.path.DirectedGridMesh;
+import robot.path.MapNode;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.robotics.pathfinding.AstarSearchAlgorithm;
@@ -43,7 +44,7 @@ public class RobotMap {
 	
 	public final int SPEED;
 	
-	
+	public final static MapNode[] MAP=new MapNode[67];
 	
 	//================================ Motors =================================
 	// these may not be strictly necessary, but it's good to have all constants in one place
