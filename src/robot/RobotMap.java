@@ -16,19 +16,32 @@ public class RobotMap {
 	//======================== Mapping and Pathfinding ========================
 	
 	/**
-	 * the nodes the robot has to visit, where the first is the starting point, the rest in no particular order
+	 * the path of the robot, hardcoded at the beginning of each round.
+	 * effectively a list of [direction, parking/intersection, speed]
 	 */
-	public final int[] NODES;
+	public final int[][] PATH;
 	
-	/**
-	 * a map of the course
-	 */
-	public final DirectedGridMesh MAP;
-
-	/**
-	 * a path finder that uses MAP to find a path between two nodes
-	 */
-	public final NodePathFinder PATHFINDER;
+	public final int FORWARD;
+	
+	public final int LEFT;
+	
+	public final int RIGHT;
+	
+	public final int PARKING;
+	
+	public final int INTERSECTION;
+	
+	public final int FAST;
+	
+	public final int SLOW;
+	
+	public final int INTERSECTION_DISTANCE;
+	
+	public final int DIRECTION;
+	
+	public final int TYPE;
+	
+	public final int SPEED;
 	
 	
 	
@@ -68,11 +81,6 @@ public class RobotMap {
 	 */
 	public final Port ULTRASONIC;
 	
-	/**
-	 * the port for the gyroscope
-	 */
-	public final Port GYROSCOPE;
-	
 	
 	
 	/**
@@ -82,18 +90,30 @@ public class RobotMap {
 	 */
 	public RobotMap(String input) {
 		System.out.println("RobotMap init start");
-		this.NODES = new int[]{-1,-1,-1,-1}; // TODO: fix values
-		this.MAP = makeMap(); // TODO: implement this or something
-		this.PATHFINDER = new NodePathFinder(new AstarSearchAlgorithm(), MAP);
+		this.PATH = new int[][]{ // mebbe read from file
+			{0,3,6}
+		};
+		this.DIRECTION = 0;
+		this.TYPE = 1;
+		this.SPEED = 2;
+		int c = 0;
+		this.FORWARD = c++;
+		this.LEFT = c++;
+		this.RIGHT = c++;
+		this.PARKING = c++;
+		this.INTERSECTION = c++;
+		this.FAST = 740;
+		this.SLOW = 500;
 		
-		this.LEFT_MOTOR = 'A'; // Change pls
-		this.RIGHT_MOTOR = 'D'; // Change pls
-		this.ULTRASONIC_MOTOR = 'B'; // Change pls
+		this.INTERSECTION_DISTANCE = 100; // 100 is temporary, pls fix
 		
-		this.LEFT_COLOR = SensorPort.S1; // Change pls
-		this.RIGHT_COLOR = SensorPort.S4; // Change pls
-		this.ULTRASONIC = SensorPort.S3; // Change pls
-		this.GYROSCOPE = SensorPort.S2; // Change pls
+		this.LEFT_MOTOR = 'A';
+		this.RIGHT_MOTOR = 'D';
+		this.ULTRASONIC_MOTOR = 'B';
+		
+		this.LEFT_COLOR = SensorPort.S1;
+		this.RIGHT_COLOR = SensorPort.S4;
+		this.ULTRASONIC = SensorPort.S3;
 		System.out.println("RobotMap init end");
 	}
 	
