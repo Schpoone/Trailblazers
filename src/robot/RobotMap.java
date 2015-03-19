@@ -3,8 +3,6 @@ import robot.path.DirectedGridMesh;
 import robot.path.MapNode;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
-import lejos.robotics.pathfinding.AstarSearchAlgorithm;
-import lejos.robotics.pathfinding.NodePathFinder;
 
 /**
  * Stores all the constants relevant to the robot. 

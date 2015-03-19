@@ -4,7 +4,6 @@ import java.util.Queue;
 
 import lejos.hardware.motor.Motor;
 import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.Color;
 import lejos.robotics.RegulatedMotor;
@@ -13,8 +12,6 @@ import lejos.robotics.pathfinding.Path;
 /**
  * This represents the physical robot with all of its systems.
  * @author Jason
- * 
- * TODO: Add an I/O class as a field for a Robot (would have getters for all motors and sensors)
  */
 public class Robot {
 
@@ -33,7 +30,7 @@ public class Robot {
 	public static final IO io = new IO();
 	public static final Audio audio = new Audio();
 
-	public static final float collisionThreshold = .05f;//m
+	private final float collisionThreshold = .05f;//needs to be tested
 
 	private final Queue<Path> paths;
 	private Path curPath;
