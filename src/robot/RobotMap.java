@@ -42,6 +42,8 @@ public class RobotMap {
 	
 	public final int SPEED;
 	
+	public final static int START=1;
+	
 	public final static MapNode[] MAP=new MapNode[67];
 	
 	//================================ Motors =================================
