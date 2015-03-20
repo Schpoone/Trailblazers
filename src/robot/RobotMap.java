@@ -18,6 +18,8 @@ public class RobotMap {
 	 * the path of the robot, hardcoded at the beginning of each round.
 	 * effectively a list of [direction, parking/intersection, speed]
 	 */
+	public final int[][] PATH_PROPERTIES;
+	
 	public final int[][] PATH;
 	
 	public final int FORWARD;
@@ -41,8 +43,6 @@ public class RobotMap {
 	public final int TYPE;
 	
 	public final int SPEED;
-	
-	public final static int START=1;
 	
 	public final static MapNode[] MAP=new MapNode[67];
 	
@@ -85,15 +85,14 @@ public class RobotMap {
 	
 	
 	/**
-	 * read the values for everything, or most everything, form a properties file.
+	 * read the values for eve+rything, or most everything, form a properties file.
 	 * only exception might be the map
 	 * @param input the path of the properties file
 	 */
 	public RobotMap(String input) {
 		System.out.println("RobotMap init start");
-		this.PATH = new int[][]{ // mebbe read from file
-			{0,3,6}
-		};
+		
+		
 		this.DIRECTION = 0;
 		this.TYPE = 1;
 		this.SPEED = 2;
@@ -120,6 +119,30 @@ public class RobotMap {
 	
 	public DirectedGridMesh makeMap() {
 		
+		return null;
+	}
+	
+	public initMap{
+		//{properties, nextnode, direction, length (cm), no. of stop signs, speed (cm/sec)}
+		int n = 0, ne= 45, e = 90, se = 135, s = 180, sw = -135, w = -90, nw = -45;
+		int fast = 16, int slow = 10;
+		
+		this.PATH_PROPERTIES = new int[][]{ // mebbe read from file
+		/*0-4*/  {0,11,n,25,1,fast},{0,12,s,25,1,fast},{1,32,e,560,3,fast},{1,24,},{},
+		/*5-9*/  {},{},{},{},{},
+		/*10-14*/{},{},{},{},{},
+		/*15-19*/{},{},{},{},{},
+		/*20-24*/{},{},{},{},{},
+		/*25-29*/{},{},{},{},{},
+		/*30-34*/{},{},{},{},{},
+		/*35-39*/{},{},{},{},{},
+		/*40-44*/{},{},{},{},{},
+		/*45-49*/{},{},{},{},{},
+		/*50-54*/{},{},{},{},{},
+		/*55-59*/{},{},{},{},{},
+		/*60-64*/{},{},{},{},{},
+		/*65-69*/{},{},{},{},{},
+		};
 		return null;
 	}
 }
