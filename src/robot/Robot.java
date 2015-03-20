@@ -42,7 +42,7 @@ public class Robot {
 	private int nodeIndex = 0;
 	private int[] currentNode;
 	
-	private Thread UltrasonicRunner;
+	private Thread ultrasonic;
 
 	public Robot() {
 		System.out.println("Robot init start");
@@ -51,6 +51,8 @@ public class Robot {
 		drive.start();
 		// calculate one or more paths here and add them to the queue
 		System.out.println("Robot init finish");
+		
+		ultrasonic = new Thread(new UltrasonicMapper(ultrasonic));
 	}
 
 	public boolean isRunning() {
