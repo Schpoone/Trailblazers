@@ -35,7 +35,7 @@ public class Robot {
 	private int nodeIndex = 0;
 	private int[] currentNode;
 	
-	private Thread ultrasonic;
+	private UltrasonicMapper ultrasonic;
 
 	public Robot() {
 		System.out.println("Robot init start");
@@ -55,7 +55,8 @@ public class Robot {
 	 * main loop of the robot, runs once per path
 	 */
 	public void runPath() {
-		//ultrasonic.start();
+		//Robot.audio.call();
+		ultrasonic.start();
 		while(nodeIndex < robotMap.PATH.length) {
 			io.read(); // read from sensors
 
@@ -75,12 +76,12 @@ public class Robot {
 				}
 				wait(3000);
 				if (currentNode[robotMap.DIRECTION_INDEX] == robotMap.LEFT) {
-					unparkLeft();
+					//unparkLeft();
 				}
 				if (currentNode[robotMap.DIRECTION_INDEX] == robotMap.RIGHT) {
 					unparkRight();//WHY DOESN'T THIS EXIST
+					driveThroughLot(false, currentNode[robotMap.DIRECTION_INDEX]);
 				}
-				driveThroughLot(false, currentNode[robotMap.DIRECTION_INDEX]);
 				nodeIndex++;
 			}
 			
@@ -99,6 +100,7 @@ public class Robot {
 
 		// I am done now. DONE!
 		Robot.drive.stop();
+		//Robot.audio.call();
 	}
 
 	/**
@@ -136,7 +138,7 @@ public class Robot {
 	private void defaultDrive(int speed, int pauseColor) {
 		if(Robot.io.getLeftColor() != Color.BLACK)
 			System.out.println("Color: " + Robot.io.getLeftColor());
-		if(Robot.io.getSanicDistance() <= collisionThreshold) {
+		if(ultrasonic.objects[90][0] <= collisionThreshold) {
 			Robot.drive.stop();
 		} else if (pauseColor > -1 && (Robot.io.getLeftColor() == pauseColor && Robot.io.getRightColor() == pauseColor)) {
 			
@@ -148,9 +150,9 @@ public class Robot {
 			}
 			nodeIndex++;
 			System.out.println(nodeIndex);
-		} else if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.RED) && Robot.io.getRightColor() != Robot.io.getLeftColor()) {
+		} else if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW || Robot.io.getLeftColor() == Color.RED) && Robot.io.getRightColor() != Robot.io.getLeftColor()) {
 			Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
-		} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getRightColor() == Color.RED) && Robot.io.getLeftColor() != Robot.io.getRightColor()) {
+		} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW || Robot.io.getRightColor() == Color.RED) && Robot.io.getLeftColor() != Robot.io.getRightColor()) {
 			Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
 		} else if(Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
 			Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
@@ -257,9 +259,9 @@ public class Robot {
 	private void unparkLeft() {
 		while (Robot.io.getLeftColor() != Color.BLUE && Robot.io.getRightColor() != Color.BLUE) { // while we are not out of the parking space
 			Robot.io.read();
-			if(Robot.io.getLeftColor() == Color.WHITE && Robot.io.getRightColor() != Color.WHITE) { // hit the left edge, correcting...
+			if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW) && (Robot.io.getRightColor() != Color.WHITE || Robot.io.getRightColor() == Color.YELLOW)) { // hit the left edge, correcting...
 				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
-			} else if(Robot.io.getRightColor() == Color.WHITE && Robot.io.getLeftColor() != Color.WHITE) { // hit the right edge, correcting...
+			} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getRightColor() == Color.YELLOW) && (Robot.io.getLeftColor() != Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW)) { // hit the right edge, correcting...
 				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
 			} else { // we're fine now, proceed as planned
 				Robot.drive.setSpeed(spdToGetInSpace); 
@@ -282,9 +284,9 @@ public class Robot {
 	private void unparkRight() {
 		while (Robot.io.getLeftColor() != Color.BLUE && Robot.io.getRightColor() != Color.BLUE) { // while we are not out of the parking space
 			Robot.io.read();
-			if(Robot.io.getLeftColor() == Color.WHITE && Robot.io.getRightColor() != Color.WHITE) { // hit the left edge, correcting...
+			if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW) && (Robot.io.getRightColor() != Color.WHITE || Robot.io.getRightColor() == Color.YELLOW)) { // hit the left edge, correcting...
 				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
-			} else if(Robot.io.getRightColor() == Color.WHITE && Robot.io.getLeftColor() != Color.WHITE) { // hit the right edge, correcting...
+			} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getRightColor() == Color.YELLOW) && (Robot.io.getLeftColor() != Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW)) { // hit the right edge, correcting...
 				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
 			} else { // we're fine now, proceed as planned
 				Robot.drive.setSpeed(spdToGetInSpace); 
@@ -298,7 +300,7 @@ public class Robot {
 		Robot.drive.setLeftVel(-spdToGetInSpace);
 		while(!leftHit) {
 			Robot.io.read();
-			leftHit = Robot.io.getLeftColor() == Color.WHITE;
+			leftHit = Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW;
 		}
 		// no overshoot, pls
 		Robot.drive.stop();
@@ -316,7 +318,7 @@ public class Robot {
 		Robot.drive.setRightVel(spdToGetInSpace);
 		while(!leftHit) {
 			Robot.io.read();
-			leftHit = Robot.io.getLeftColor() == Color.WHITE;
+			leftHit = Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW;
 		}
 		// no overshoot, pls
 		Robot.drive.stop();
@@ -334,7 +336,7 @@ public class Robot {
 		Robot.drive.setRightVel(-spdToGetInSpace);
 		while(!rightHit) {
 			Robot.io.read();
-			rightHit = Robot.io.getRightColor() == Color.WHITE;
+			rightHit = Robot.io.getRightColor() == Color.WHITE || Robot.io.getRightColor() == Color.YELLOW;
 		}
 		// no overshoot, pls
 		Robot.drive.stop();
@@ -350,9 +352,9 @@ public class Robot {
 	private boolean driveThroughLot(boolean isParking, int direction) {
 		if (/*direction where object was detected = direction*/isParking) { 
 			wait(3000);
-			if (Robot.io.getSanicDistance() <= collisionThreshold)//check forward
+			if (ultrasonic.objects[90][0] <= collisionThreshold)//check forward
 				moveForward(robotMap.PARKING_SPACE_DISTANCE, robotMap.LOT_SPEED);
-			if (isParking) return true;	
+			if (isParking) return true;
 		} else if(Robot.io.getSanicDistance() <= collisionThreshold) {
 			Robot.drive.stop();
 		} else if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.BLUE) && Robot.io.getRightColor() != Robot.io.getLeftColor()) {

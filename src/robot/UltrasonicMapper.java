@@ -3,6 +3,9 @@ package robot;
 
 public class UltrasonicMapper extends Thread{
 
+	/**
+	 * stores distance in cm
+	 */
 	public float[][] objects = new float[180][1];
 	
 	private Thread thisParent;
@@ -40,8 +43,6 @@ public class UltrasonicMapper extends Thread{
 	 * moves the sensor back and forth and keeps track of any objects it senses
 	 */
 	public void run() {
-		// TODO Auto-generated method stub
-		
 		//read sensor
 		//read motor position
 		while(!this.isInterrupted())
@@ -60,9 +61,20 @@ public class UltrasonicMapper extends Thread{
 			this.currentCount = Robot.sanicMotor.getTachoCount();
 			this.currentDegree = (int) (this.currentCount * countDegreeRatio);
 			
-			this.objects[currentDegree+10][0] = sampleArray[0];
-			System.out.println(currentDegree + ": " + sampleArray[0]);
+			this.objects[currentDegree+10][0] = sampleArray[0]*100;
+			
+			//System.out.println(currentDegree + ": " + sampleArray[0]);
 		}
+	}
+	
+	/**
+	 * This method gives the distance to an object at a certain direction (forward, left, right)
+	 * This method will account for noise when detecting objects due to the cone of reference
+	 * @param direction to check for object
+	 * @return distance to object, in cm
+	 */
+	public float isObject(int direction) {
+		return objects[direction][0];
 	}
 
 }

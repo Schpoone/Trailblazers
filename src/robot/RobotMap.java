@@ -129,7 +129,8 @@ public class RobotMap {
 
 		// [direction, parking/intersection, speed]
 		this.PATH = new int[][]{ // mebbe read from file
-				{this.FORWARD,this.INTERSECTION,this.SLOW}
+				{this.LEFT,this.INTERSECTION,this.SLOW}, // get out of starting place
+				{this.LEFT,this.INTERSECTION,this.SLOW} // turn onto path
 		};	
 
 		System.out.println("RobotMap init end");
