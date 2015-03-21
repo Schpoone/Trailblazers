@@ -137,11 +137,11 @@ public class Robot {
 	 */
 	private void defaultDrive(int speed, int pauseColor) {
 		if(Robot.io.getLeftColor() != Color.BLACK)
-			System.out.println("Color: " + Robot.io.getLeftColor());
+			//System.out.println("Color: " + Robot.io.getLeftColor());
 		if(ultrasonic.objects[90][0] <= collisionThreshold) {
 			Robot.drive.stop();
 		} else if (pauseColor > -1 && (Robot.io.getLeftColor() == pauseColor && Robot.io.getRightColor() == pauseColor)) {
-			
+			System.out.println("Hit red line");
 			this.stop(3);
 			if(currentNode[robotMap.DIRECTION_INDEX] == robotMap.RIGHT) {
 				intersectionRight();
@@ -151,8 +151,10 @@ public class Robot {
 			nodeIndex++;
 			System.out.println(nodeIndex);
 		} else if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW || Robot.io.getLeftColor() == Color.RED) && Robot.io.getRightColor() != Robot.io.getLeftColor()) {
+			System.out.println("Line of left");
 			Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
 		} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW || Robot.io.getRightColor() == Color.RED) && Robot.io.getLeftColor() != Robot.io.getRightColor()) {
+			System.out.println("Line on right");
 			Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
 		} else if(Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
 			Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
