@@ -1,13 +1,10 @@
 package robot;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import lejos.hardware.motor.Motor;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.Color;
 import lejos.robotics.RegulatedMotor;
-import lejos.robotics.pathfinding.Path;
 
 /**
  * This represents the physical robot with all of its systems.
@@ -32,11 +29,7 @@ public class Robot {
 
 	private final float collisionThreshold = .05f;//needs to be tested
 
-	private final Queue<Path> paths;
-	private Path curPath;
 	private boolean isRunning;
-	private int leftOwed=0;//how much the robot is facing left compared to how much it should be, measured in calls to defaultdrive
-	private int rightOwed=0;//how much the robot is facing right compared to how much it should be, measured in calls to defaultdrive
 	private final int spdToGetInSpace = (int) Math.min(Robot.leftMotor.getMaxSpeed(), Robot.rightMotor.getMaxSpeed());
 	private final double correctionFactor = 0.8; // needs to be tested
 	private int nodeIndex = 0;
@@ -46,13 +39,12 @@ public class Robot {
 
 	public Robot() {
 		System.out.println("Robot init start");
-		this.paths = new LinkedList<Path>();
 		this.isRunning = true;
+
 		drive.start();
-		// calculate one or more paths here and add them to the queue
+		ultrasonic = new UltrasonicMapper();
 		System.out.println("Robot init finish");
 		
-		ultrasonic = new Thread(new UltrasonicMapper(ultrasonic));
 	}
 
 	public boolean isRunning() {
@@ -63,6 +55,7 @@ public class Robot {
 	 * main loop of the robot, runs once per path
 	 */
 	public void runPath() {
+		//ultrasonic.start();
 		while(nodeIndex < robotMap.PATH.length) {
 			io.read(); // read from sensors
 
@@ -88,10 +81,12 @@ public class Robot {
 					unparkRight();//WHY DOESN'T THIS EXIST
 				}
 				driveThroughLot(false, currentNode[robotMap.DIRECTION_INDEX]);
+				nodeIndex++;
 			}
 			
 			if (currentNode[robotMap.TYPE_INDEX] == robotMap.DRIVE_BY_LOT) {
 				driveThroughLot(false, currentNode[robotMap.DIRECTION_INDEX]);
+				nodeIndex++;
 			}
 
 			// maybe wait a bit
@@ -103,7 +98,7 @@ public class Robot {
 		}
 
 		// I am done now. DONE!
-
+		Robot.drive.stop();
 	}
 
 	/**
@@ -139,15 +134,20 @@ public class Robot {
 	 * @param pauseColor is the color the robot needs to stop at
 	 */
 	private void defaultDrive(int speed, int pauseColor) {
+		if(Robot.io.getLeftColor() != Color.BLACK)
+			System.out.println("Color: " + Robot.io.getLeftColor());
 		if(Robot.io.getSanicDistance() <= collisionThreshold) {
 			Robot.drive.stop();
 		} else if (pauseColor > -1 && (Robot.io.getLeftColor() == pauseColor && Robot.io.getRightColor() == pauseColor)) {
+			
 			this.stop(3);
 			if(currentNode[robotMap.DIRECTION_INDEX] == robotMap.RIGHT) {
 				intersectionRight();
 			} else if(currentNode[robotMap.DIRECTION_INDEX] == robotMap.LEFT) {
 				intersectionLeft();
 			}
+			nodeIndex++;
+			System.out.println(nodeIndex);
 		} else if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.RED) && Robot.io.getRightColor() != Robot.io.getLeftColor()) {
 			Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
 		} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getRightColor() == Color.RED) && Robot.io.getLeftColor() != Robot.io.getRightColor()) {
@@ -327,7 +327,7 @@ public class Robot {
 	 * assumes robot is stopped and waiting time is over
 	 */
 	private void intersectionRight() {
-		moveForward(robotMap.INTERSECTION_DISTANCE, 740);
+		moveForward(robotMap.INTERSECTION_DISTANCE, robotMap.SLOW);
 		// turn right
 		boolean rightHit = false;
 		Robot.drive.setLeftVel(spdToGetInSpace);

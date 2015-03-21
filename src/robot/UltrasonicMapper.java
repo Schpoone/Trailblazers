@@ -1,7 +1,7 @@
 package robot;
 
 
-public class UltrasonicMapper implements Runnable{
+public class UltrasonicMapper extends Thread{
 
 	public float[][] objects = new float[180][1];
 	
@@ -9,19 +9,19 @@ public class UltrasonicMapper implements Runnable{
 	
 	private int currentDegree;
 	private int currentCount;
-	private final double gearRatio = 28/12;
+	private final double gearRatio = 28.0/12;
 	private final double countDegreeRatio;
 	
 	/**
 	 * 
 	 * @param parent
 	 */
-	public UltrasonicMapper(Thread parent)
+	public UltrasonicMapper()
 	{
+		//done in IO
+		//Robot.ultra.enable();
 		
-		Robot.ultra.enable();
-		
-		this.thisParent = parent;
+		//this.thisParent = parent;
 		
 		int initialCount;
 		int finalCount;
@@ -44,7 +44,7 @@ public class UltrasonicMapper implements Runnable{
 		
 		//read sensor
 		//read motor position
-		while(!thisParent.isInterrupted())
+		while(!this.isInterrupted())
 		{
 			this.currentCount = Robot.sanicMotor.getTachoCount();
 			this.currentDegree = (int) (this.currentCount * countDegreeRatio);
@@ -60,7 +60,7 @@ public class UltrasonicMapper implements Runnable{
 			this.currentCount = Robot.sanicMotor.getTachoCount();
 			this.currentDegree = (int) (this.currentCount * countDegreeRatio);
 			
-			this.objects[currentDegree][0] = sampleArray[0];
+			this.objects[currentDegree+10][0] = sampleArray[0];
 			System.out.println(currentDegree + ": " + sampleArray[0]);
 		}
 	}

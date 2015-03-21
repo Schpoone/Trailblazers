@@ -8,22 +8,22 @@ public class MapNode {
 	public int distance=Integer.MAX_VALUE,previous,index;
 	
 	
-	public static void main(String[] args){//runs a djikstra's on manual input
-		int target;
-		LinkedList<Integer> stuff=new LinkedList<Integer>(),seen=new LinkedList<Integer>();
-		stuff.add(RobotMap.START);
-		while(stuff.size()>0){
-			MapNode current=RobotMap.MAP[stuff.pop()];
-			int location=current.index;
-			for (int i:current.neighbors[1]){
-				int distance=0;
-				if (i==target){
-					getDistance(i);
-				}
-			}
-			
-		}
-	}
+//	public static void main(String[] args){//runs a djikstra's on manual input
+//		int target;
+//		LinkedList<Integer> stuff=new LinkedList<Integer>(),seen=new LinkedList<Integer>();
+//		stuff.add(RobotMap.START);
+//		while(stuff.size()>0){
+//			MapNode current=RobotMap.MAP[stuff.pop()];
+//			int location=current.index;
+//			for (int i:current.neighbors[1]){
+//				int distance=0;
+//				if (i==target){
+//					getDistance(i);
+//				}
+//			}
+//			
+//		}
+//	}
 	
 
 	
