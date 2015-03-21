@@ -136,8 +136,6 @@ public class Robot {
 	 * @param pauseColor is the color the robot needs to stop at
 	 */
 	private void defaultDrive(int speed, int pauseColor) {
-		if(Robot.io.getLeftColor() != Color.BLACK)
-			//System.out.println("Color: " + Robot.io.getLeftColor());
 		if(ultrasonic.objects[90][0] <= collisionThreshold) {
 			Robot.drive.stop();
 		} else if (pauseColor > -1 && (Robot.io.getLeftColor() == pauseColor && Robot.io.getRightColor() == pauseColor)) {
@@ -157,8 +155,10 @@ public class Robot {
 			System.out.println("Line on right");
 			Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
 		} else if(Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
+			System.out.println("Correcting");
 			Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
 		} else {
+			System.out.println("Default");
 			Robot.drive.setSpeed(speed);
 			Robot.drive.goForward();
 		}
