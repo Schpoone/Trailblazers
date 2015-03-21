@@ -20,8 +20,6 @@ public class MapNode {
 				if (i==target){
 					getDistance(i);
 				}
-					
-				}
 			}
 			
 		}

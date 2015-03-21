@@ -17,6 +17,8 @@ public class RobotMap {
 	 * the path of the robot, hardcoded at the beginning of each round.
 	 * effectively a list of [direction, parking/intersection, speed]
 	 */
+	public final int[][] PATH_PROPERTIES;
+	
 	public final int[][] PATH;
 	
 	public final int DIRECTION_INDEX = 0;
@@ -99,6 +101,7 @@ public class RobotMap {
 	 */
 	public RobotMap(String input) {
 		System.out.println("RobotMap init start");
+<<<<<<< HEAD
 		this.PATH = new int[][]{ // mebbe read from file
 		/*0-4*/  {0,3,6},{},{},{},{},
 		/*5-9*/  {},{},{},{},{},
@@ -115,6 +118,23 @@ public class RobotMap {
 		/*60-64*/{},{},{},{},{},
 		/*65-69*/{},{},{},{},{},
 		};
+=======
+		
+		
+		this.DIRECTION = 0;
+		this.TYPE = 1;
+		this.SPEED = 2;
+		int c = 0;
+		this.FORWARD = c++;
+		this.LEFT = c++;
+		this.RIGHT = c++;
+		this.PARKING = c++;
+		this.INTERSECTION = c++;
+		this.FAST = 740;
+		this.SLOW = 500;
+		
+		this.INTERSECTION_DISTANCE = 100; // 100 is temporary, pls fix
+>>>>>>> branch 'alpha' of https://github.com/1j4k7/Trailblazers.git
 		
 		this.LEFT_MOTOR = 'A';
 		this.RIGHT_MOTOR = 'D';
@@ -128,6 +148,30 @@ public class RobotMap {
 	
 	public DirectedGridMesh makeMap() {
 		
+		return null;
+	}
+	
+	public initMap{
+		//{properties, nextnode, direction, length (cm), no. of stop signs, speed (cm/sec)}
+		int n = 0, ne= 45, e = 90, se = 135, s = 180, sw = -135, w = -90, nw = -45;
+		int fast = 16, int slow = 10;
+		
+		this.PATH_PROPERTIES = new int[][]{ // mebbe read from file
+		/*0-4*/  {0,11,n,25,1,fast},{0,12,s,25,1,fast},{1,32,e,560,3,fast},{1,24,},{},
+		/*5-9*/  {},{},{},{},{},
+		/*10-14*/{},{},{},{},{},
+		/*15-19*/{},{},{},{},{},
+		/*20-24*/{},{},{},{},{},
+		/*25-29*/{},{},{},{},{},
+		/*30-34*/{},{},{},{},{},
+		/*35-39*/{},{},{},{},{},
+		/*40-44*/{},{},{},{},{},
+		/*45-49*/{},{},{},{},{},
+		/*50-54*/{},{},{},{},{},
+		/*55-59*/{},{},{},{},{},
+		/*60-64*/{},{},{},{},{},
+		/*65-69*/{},{},{},{},{},
+		};
 		return null;
 	}
 }
