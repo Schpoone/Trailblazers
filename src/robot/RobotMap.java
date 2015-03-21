@@ -101,7 +101,6 @@ public class RobotMap {
 	 */
 	public RobotMap(String input) {
 		System.out.println("RobotMap init start");
-<<<<<<< HEAD
 		this.PATH = new int[][]{ // mebbe read from file
 		/*0-4*/  {0,3,6},{},{},{},{},
 		/*5-9*/  {},{},{},{},{},
@@ -117,9 +116,7 @@ public class RobotMap {
 		/*55-59*/{},{},{},{},{},
 		/*60-64*/{},{},{},{},{},
 		/*65-69*/{},{},{},{},{},
-		};
-=======
-		
+		};	
 		
 		this.DIRECTION = 0;
 		this.TYPE = 1;
@@ -134,7 +131,6 @@ public class RobotMap {
 		this.SLOW = 500;
 		
 		this.INTERSECTION_DISTANCE = 100; // 100 is temporary, pls fix
->>>>>>> branch 'alpha' of https://github.com/1j4k7/Trailblazers.git
 		
 		this.LEFT_MOTOR = 'A';
 		this.RIGHT_MOTOR = 'D';
