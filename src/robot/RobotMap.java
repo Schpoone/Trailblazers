@@ -14,7 +14,7 @@ public class RobotMap {
 	//======================== Mapping and Pathfinding ========================
 
 
-	public final int[][] NODE_MAP = null; // waht dis even for?
+	public int[][] NODE_MAP = null; // waht dis even for?
 
 	/**
 	 * the path of the robot, hardcoded at the beginning of each round.
@@ -215,7 +215,7 @@ public class RobotMap {
 /*61*/		{4,	64,	e,	95,	1,	fast,	60,	n,	80,	1,	fast},
 /*62*/		{3,	53,	w,	115,1,	fast},
 /*63*/		{3,	10,	n,	175,0,	slow},
-/*64*/		{3,	63,	n,	80,	1,	slow}
+/*64*/		{3,	63,	n,	80,	1,	slow}};
 		return;
 	}
 }
