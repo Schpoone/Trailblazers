@@ -9,4 +9,8 @@ public class Audio {
 		Sound.playSample(new File("wall-e.wav"), Sound.VOL_MAX);
 	}
 	
+	public void onSight() {
+		Sound.playSample(new File("eve.wav"), Sound.VOL_MAX);
+	}
+	
 }
