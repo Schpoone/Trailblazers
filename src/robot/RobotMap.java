@@ -216,6 +216,39 @@ public class RobotMap {
 /*62*/		{3,	53,	w,	115,1,	fast},
 /*63*/		{3,	10,	n,	175,0,	slow},
 /*64*/		{3,	63,	n,	80,	1,	slow}};
+	//calculate the length of array node for dijkstra calculation
+	int length = 0;
+	for(int[] i:NODE_MAP){
+		if(i[0] == 2 || i[0] == 4)	length+=2;
+		if(i[0] == 0 || i[0] == 1 || i[0] == 3)	length+=1;
+	}
+	
+	//Create the list of nodes containing the time distance and nodes
+	EDGE = new int[length-1][4];
+	int NodeIndex = 0;
+	for(int i =0; i < EDGE.length; i++){
+		if(NODE_MAP[NodeIndex][0] != 5) calculateEDGE(NodeIndex,new int[]{NODE_MAP[NodeIndex][1], 
+				NODE_MAP[NodeIndex][2], NODE_MAP[NodeIndex][3], 
+				NODE_MAP[NodeIndex][4], NODE_MAP[NodeIndex][5]}, EDGE[i] );
+		if(NODE_MAP[NodeIndex].length>6){
+			i++;
+			calculateEDGE(NodeIndex,new int[]{NODE_MAP[NodeIndex][6], 
+					NODE_MAP[NodeIndex][7], NODE_MAP[NodeIndex][8], 
+					NODE_MAP[NodeIndex][9], NODE_MAP[NodeIndex][10]}, EDGE[i] );}
+		NodeIndex++;
+	}
+	
 		return;
+	}
+	
+	//The method set edges and calculate time distance
+	public void calculateEDGE(int node0, int[] property, int[] list){
+		list[0] = node0;
+		list[1] = property[0];
+		list[3] = property[1];
+		int time = (int)((double)property[2]/property[4] + (double)property[3]*3);
+		if(list[0] == 3)	time+=2;
+		if(list[0] == 4 || list[0] == 2) time +=3;
+		list[2] = time;
 	}
 }
