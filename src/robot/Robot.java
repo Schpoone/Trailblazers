@@ -136,29 +136,31 @@ public class Robot {
 	 * @param pauseColor is the color the robot needs to stop at
 	 */
 	private void defaultDrive(int speed, int pauseColor) {
+		io.read();
 		if(ultrasonic.objects[90][0] <= collisionThreshold) {
 			Robot.drive.stop();
 		} else if (pauseColor > -1 && (Robot.io.getLeftColor() == pauseColor && Robot.io.getRightColor() == pauseColor)) {
-			System.out.println("Hit red line");
+			System.out.println("ddHit red line");
 			this.stop(3);
 			if(currentNode[robotMap.DIRECTION_INDEX] == robotMap.RIGHT) {
 				intersectionRight();
 			} else if(currentNode[robotMap.DIRECTION_INDEX] == robotMap.LEFT) {
 				intersectionLeft();
 			}
+
 			nodeIndex++;
 			System.out.println(nodeIndex);
 		} else if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW || Robot.io.getLeftColor() == Color.RED) && Robot.io.getRightColor() != Robot.io.getLeftColor()) {
-			System.out.println("Line of left");
+			System.out.println("ddLine of left");
 			Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
 		} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW || Robot.io.getRightColor() == Color.RED) && Robot.io.getLeftColor() != Robot.io.getRightColor()) {
-			System.out.println("Line on right");
+			System.out.println("ddLine on right");
 			Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
 		} else if(Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
-			System.out.println("Correcting");
+			System.out.println("ddCorrecting");
 			Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
 		} else {
-			System.out.println("Default");
+			System.out.println("ddDefault");
 			Robot.drive.setSpeed(speed);
 			Robot.drive.goForward();
 		}
@@ -384,7 +386,22 @@ public class Robot {
 		Robot.leftMotor.resetTachoCount();
 		int avgCount = (leftMotor.getTachoCount() + rightMotor.getTachoCount())/2;
 		while(avgCount < distance) {
-			defaultDrive(speed);
+			if(ultrasonic.objects[90][0] <= collisionThreshold) {
+				Robot.drive.stop();
+			} else if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW || Robot.io.getLeftColor() == Color.RED) && Robot.io.getRightColor() != Robot.io.getLeftColor()) {
+				System.out.println("Line of left");
+				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
+			} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW || Robot.io.getRightColor() == Color.RED) && Robot.io.getLeftColor() != Robot.io.getRightColor()) {
+				System.out.println("Line on right");
+				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
+			} else if(Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
+				System.out.println("Correcting");
+				Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
+			} else {
+				System.out.println("Default");
+				Robot.drive.setSpeed(speed);
+				Robot.drive.goForward();
+			}
 			avgCount = (leftMotor.getTachoCount() + rightMotor.getTachoCount())/2;
 		}
 		Robot.drive.stop();
