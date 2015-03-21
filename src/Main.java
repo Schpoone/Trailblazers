@@ -8,7 +8,7 @@ import robot.Robot;
 public class Main {
 	public static Robot eve;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		Button.ESCAPE.addKeyListener(new KeyListener() {
 
 			@Override

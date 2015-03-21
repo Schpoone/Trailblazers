@@ -27,7 +27,7 @@ public class Robot {
 	public static final IO io = new IO();
 	public static final Audio audio = new Audio();
 
-	private final float collisionThreshold = .05f;//needs to be tested
+	private final float collisionThreshold = 10f;//needs to be tested
 
 	private boolean isRunning;
 	private final int spdToGetInSpace = (int) Math.min(Robot.leftMotor.getMaxSpeed(), Robot.rightMotor.getMaxSpeed());
@@ -99,6 +99,8 @@ public class Robot {
 		}
 
 		// I am done now. DONE!
+		Robot.drive.setSpeed(200);
+		this.wait(6000);
 		Robot.drive.stop();
 		//Robot.audio.call();
 	}
@@ -140,27 +142,29 @@ public class Robot {
 		if(ultrasonic.objects[90][0] <= collisionThreshold) {
 			Robot.drive.stop();
 		} else if (pauseColor > -1 && (Robot.io.getLeftColor() == pauseColor && Robot.io.getRightColor() == pauseColor)) {
-			System.out.println("ddHit red line");
+			//System.out.println("ddHit red line");
 			this.stop(3);
+			moveForward(robotMap.INTERSECTION_DISTANCE, speed);
 			if(currentNode[robotMap.DIRECTION_INDEX] == robotMap.RIGHT) {
 				intersectionRight();
 			} else if(currentNode[robotMap.DIRECTION_INDEX] == robotMap.LEFT) {
 				intersectionLeft();
 			}
-
+			
 			nodeIndex++;
 			System.out.println(nodeIndex);
 		} else if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW || Robot.io.getLeftColor() == Color.RED) && Robot.io.getRightColor() != Robot.io.getLeftColor()) {
-			System.out.println("ddLine of left");
-			Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
+			//System.out.println("ddLine on left");
+			Robot.drive.setSpeedRight((int) (speed*correctionFactor));
 		} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW || Robot.io.getRightColor() == Color.RED) && Robot.io.getLeftColor() != Robot.io.getRightColor()) {
-			System.out.println("ddLine on right");
-			Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
+			//System.out.println("ddLine on right");
+			Robot.drive.setSpeedLeft((int) (speed*correctionFactor));
 		} else if(Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
-			System.out.println("ddCorrecting");
-			Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
+			//System.out.println("ddCorrecting");
+			Robot.drive.setSpeed(speed);
+			Robot.drive.release();
 		} else {
-			System.out.println("ddDefault");
+			///System.out.println("ddDefault");
 			Robot.drive.setSpeed(speed);
 			Robot.drive.goForward();
 		}
@@ -204,9 +208,9 @@ public class Robot {
 		while (Robot.io.getLeftColor() != Color.WHITE && Robot.io.getRightColor() != Color.WHITE) { // while we're not at the back of the parking space
 			Robot.io.read();
 			if(Robot.io.getLeftColor() == Color.WHITE && Robot.io.getRightColor() != Color.WHITE) { // hit the left edge, correcting...
-				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
+				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedLeft()*correctionFactor));
 			} else if(Robot.io.getRightColor() == Color.WHITE && Robot.io.getLeftColor() != Color.WHITE) { // hit the right edge, correcting...
-				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
+				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedRight()*correctionFactor));
 			} else { // we're fine now, proceed as planned
 				Robot.drive.setSpeed(spdToGetInSpace); 
 				Robot.drive.goForward();
@@ -244,9 +248,9 @@ public class Robot {
 		while (Robot.io.getLeftColor() != Color.WHITE && Robot.io.getRightColor() != Color.WHITE) { // while we're not at the back of the parking space
 			Robot.io.read();
 			if(Robot.io.getLeftColor() == Color.WHITE && Robot.io.getRightColor() != Color.WHITE) { // hit the left edge, correcting...
-				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
+				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedLeft()*correctionFactor));
 			} else if(Robot.io.getRightColor() == Color.WHITE && Robot.io.getLeftColor() != Color.WHITE) { // hit the right edge, correcting...
-				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
+				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedRight()*correctionFactor));
 			} else { // we're fine now, proceed as planned
 				Robot.drive.setSpeed(spdToGetInSpace); 
 				Robot.drive.goForward();
@@ -264,9 +268,9 @@ public class Robot {
 		while (Robot.io.getLeftColor() != Color.BLUE && Robot.io.getRightColor() != Color.BLUE) { // while we are not out of the parking space
 			Robot.io.read();
 			if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW) && (Robot.io.getRightColor() != Color.WHITE || Robot.io.getRightColor() == Color.YELLOW)) { // hit the left edge, correcting...
-				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
+				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedLeft()*correctionFactor));
 			} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getRightColor() == Color.YELLOW) && (Robot.io.getLeftColor() != Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW)) { // hit the right edge, correcting...
-				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
+				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedRight()*correctionFactor));
 			} else { // we're fine now, proceed as planned
 				Robot.drive.setSpeed(spdToGetInSpace); 
 				Robot.drive.goBackward();
@@ -289,9 +293,9 @@ public class Robot {
 		while (Robot.io.getLeftColor() != Color.BLUE && Robot.io.getRightColor() != Color.BLUE) { // while we are not out of the parking space
 			Robot.io.read();
 			if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW) && (Robot.io.getRightColor() != Color.WHITE || Robot.io.getRightColor() == Color.YELLOW)) { // hit the left edge, correcting...
-				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
+				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedLeft()*correctionFactor));
 			} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getRightColor() == Color.YELLOW) && (Robot.io.getLeftColor() != Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW)) { // hit the right edge, correcting...
-				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
+				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedRight()*correctionFactor));
 			} else { // we're fine now, proceed as planned
 				Robot.drive.setSpeed(spdToGetInSpace); 
 				Robot.drive.goBackward();
@@ -315,15 +319,17 @@ public class Robot {
 	 * assumes robot is stopped and waiting time is over
 	 */
 	private void intersectionLeft() {
-		moveForward(robotMap.INTERSECTION_DISTANCE, 740);
 		// turn left
 		boolean leftHit = false;
-		Robot.drive.setLeftVel(-spdToGetInSpace);
-		Robot.drive.setRightVel(spdToGetInSpace);
-		while(!leftHit) {
-			Robot.io.read();
-			leftHit = Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW;
-		}
+		System.out.println("turn left");
+		Robot.drive.setLeftVel(-robotMap.SLOW);
+		Robot.drive.setRightVel(robotMap.SLOW);
+		Robot.drive.release();
+		//while(!leftHit) {
+			//Robot.io.read();
+			//leftHit = Robot.io.getLeftColor() != Color.BLACK || Robot.io.getRightColor() != Color.BLACK;
+			this.wait(1000);
+		//}
 		// no overshoot, pls
 		Robot.drive.stop();
 	}
@@ -333,7 +339,6 @@ public class Robot {
 	 * assumes robot is stopped and waiting time is over
 	 */
 	private void intersectionRight() {
-		moveForward(robotMap.INTERSECTION_DISTANCE, robotMap.SLOW);
 		// turn right
 		boolean rightHit = false;
 		Robot.drive.setLeftVel(spdToGetInSpace);
@@ -362,11 +367,12 @@ public class Robot {
 		} else if(Robot.io.getSanicDistance() <= collisionThreshold) {
 			Robot.drive.stop();
 		} else if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.BLUE) && Robot.io.getRightColor() != Robot.io.getLeftColor()) {
-			Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
+			Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedLeft()*correctionFactor));
 		} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getRightColor() == Color.BLUE) && Robot.io.getLeftColor() != Robot.io.getRightColor()) {
-			Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
+			Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedRight()*correctionFactor));
 		} else if(Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
 			Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
+			Robot.drive.release();
 		} else {
 			Robot.drive.setSpeed(robotMap.LOT_SPEED);
 			Robot.drive.goForward();
@@ -382,29 +388,35 @@ public class Robot {
 	}
 	
 	private void moveForward(int distance, int speed) {
+		System.out.println("start mvfd");
 		Robot.rightMotor.resetTachoCount();
 		Robot.leftMotor.resetTachoCount();
 		int avgCount = (leftMotor.getTachoCount() + rightMotor.getTachoCount())/2;
+		Robot.drive.setSpeed(speed);
+		Robot.drive.goForward();
 		while(avgCount < distance) {
-			if(ultrasonic.objects[90][0] <= collisionThreshold) {
+			//io.read();
+			/*if(ultrasonic.objects[90][0] <= collisionThreshold) {
 				Robot.drive.stop();
 			} else if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW || Robot.io.getLeftColor() == Color.RED) && Robot.io.getRightColor() != Robot.io.getLeftColor()) {
-				System.out.println("Line of left");
-				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
+				//System.out.println("Line of left");
+				Robot.drive.setSpeedRight((int) (speed*correctionFactor));
+				Robot.drive.goForward();
 			} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getLeftColor() == Color.YELLOW || Robot.io.getRightColor() == Color.RED) && Robot.io.getLeftColor() != Robot.io.getRightColor()) {
-				System.out.println("Line on right");
-				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
+				//System.out.println("Line on right");
+				Robot.drive.setSpeedLeft((int) (speed*correctionFactor));
+				Robot.drive.goForward();
 			} else if(Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
-				System.out.println("Correcting");
-				Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
-			} else {
-				System.out.println("Default");
+				//System.out.println("Correcting");
 				Robot.drive.setSpeed(speed);
 				Robot.drive.goForward();
-			}
+			} else {
+				//System.out.println("Default");*/
+			//}
 			avgCount = (leftMotor.getTachoCount() + rightMotor.getTachoCount())/2;
 		}
 		Robot.drive.stop();
+		System.out.println("end mvfd");
 	}
 
 	public void kill() {

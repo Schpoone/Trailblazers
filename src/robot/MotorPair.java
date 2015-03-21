@@ -135,6 +135,7 @@ public class MotorPair {
 	 */
 	public void releaseRight() {
 		stopRight = false;
+		dirRightChanged = true;
 	}
 
 	/**
@@ -143,6 +144,7 @@ public class MotorPair {
 	 */
 	public void releaseLeft() {
 		stopLeft = false;
+		dirLeftChanged = true;
 	}
 
 	/**
@@ -217,8 +219,6 @@ public class MotorPair {
 			setSpeedRight(-vel);
 			setDirRight(-1);
 		}
-		if(vel == 0)
-			stopRight();
 	}
 
 	/**

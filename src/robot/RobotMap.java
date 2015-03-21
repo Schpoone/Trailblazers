@@ -113,11 +113,11 @@ public class RobotMap {
 		this.DRIVE_BY_LOT = 4;
 		this.INTERSECTION = 5;
 		this.FAST = 740;
-		this.SLOW = 500;
+		this.SLOW = 200;
 		this.LOT_SPEED = 300;
 
-		this.PARKING_SPACE_DISTANCE = 100;
-		this.INTERSECTION_DISTANCE = 100; // 100 is temporary, pls fix
+		this.PARKING_SPACE_DISTANCE = 200;
+		this.INTERSECTION_DISTANCE = 300; // 100 is temporary, pls fix
 
 		this.LEFT_MOTOR = 'A';
 		this.RIGHT_MOTOR = 'D';
