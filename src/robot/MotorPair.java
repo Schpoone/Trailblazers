@@ -44,8 +44,8 @@ public class MotorPair {
 		stopLeft = true;
 		speedLeftChanged = true;
 		speedRightChanged = true;
-		dirLeftChanged = true;
-		dirRightChanged = true;
+		dirLeftChanged = false;
+		dirRightChanged = false;
 		started = false;
 	}
 
@@ -135,6 +135,7 @@ public class MotorPair {
 	 */
 	public void releaseRight() {
 		stopRight = false;
+		dirRightChanged = true;
 	}
 
 	/**
@@ -143,6 +144,7 @@ public class MotorPair {
 	 */
 	public void releaseLeft() {
 		stopLeft = false;
+		dirLeftChanged = true;
 	}
 
 	/**
@@ -171,7 +173,7 @@ public class MotorPair {
 	public void setDirRight(int dir) {
 		oldDirRight = dirRight;
 		dirRight = dir;
-		dirLeftChanged = oldDirRight == dirRight;
+		dirRightChanged = oldDirRight != dirRight;
 	}
 
 	/**
@@ -182,7 +184,7 @@ public class MotorPair {
 	public void setDirLeft(int dir) {
 		oldDirLeft = dirLeft;
 		dirLeft = dir;
-		dirLeftChanged = oldDirLeft == dirLeft;
+		dirLeftChanged = oldDirLeft != dirLeft;
 	}
 
 	/**
@@ -217,8 +219,6 @@ public class MotorPair {
 			setSpeedRight(-vel);
 			setDirRight(-1);
 		}
-		if(vel == 0)
-			stopRight();
 	}
 
 	/**
@@ -270,7 +270,7 @@ public class MotorPair {
 		speedLeft = speed;
 		if(speed == 0)
 			stopLeft();
-		speedLeftChanged = oldSpeedLeft == speedLeft;
+		speedLeftChanged = oldSpeedLeft != speedLeft;
 	}
 
 	/**
@@ -284,7 +284,7 @@ public class MotorPair {
 		speedRight = speed;
 		if(speed == 0)
 			stopRight();
-		speedRightChanged = oldSpeedRight == speedRight;
+		speedRightChanged = oldSpeedRight != speedRight;
 	}
 
 	/**

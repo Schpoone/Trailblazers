@@ -1,5 +1,3 @@
-
-
 import java.util.LinkedList;
 
 public class MapNode {
@@ -31,7 +29,7 @@ public class MapNode {
 		return path;
 			
 	}
-	public static final MapNode[] MAP=null;
+	public static final MapNode[] MAP=null;//overwrite with actual map
 	private int[][] neighbors;//First value is index, second distance to node, third direction
 	public int distance=Integer.MAX_VALUE,previous=-1,index;
 	
