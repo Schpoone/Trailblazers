@@ -1,6 +1,5 @@
 package robot;
 import robot.path.DirectedGridMesh;
-import robot.path.MapNode;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 
@@ -20,29 +19,40 @@ public class RobotMap {
 	 */
 	public final int[][] PATH;
 	
-	public final int FORWARD;
+	public final int DIRECTION_INDEX = 0;
 	
-	public final int LEFT;
+	public final int TYPE_INDEX = 1;
 	
-	public final int RIGHT;
+	public final int SPEED_INDEX = 2;
 	
-	public final int PARKING;
+	//Directions
+	public final int FORWARD = 0;
 	
-	public final int INTERSECTION;
+	public final int LEFT = 1;
 	
-	public final int FAST;
+	public final int RIGHT = 2;
 	
-	public final int SLOW;
+	//Types
+	public final int PARKING = 3;
 	
-	public final int INTERSECTION_DISTANCE;
+	public final int DRIVE_BY_LOT = 4;
 	
-	public final int DIRECTION;
+	public final int INTERSECTION = 5;
 	
-	public final int TYPE;
+	//Speeds
+	public final int FAST = 740;
 	
-	public final int SPEED;
+	public final int SLOW = 500;
 	
-	public final static MapNode[] MAP=new MapNode[67];
+	public final int LOT_SPEED = 300;//arbitrary value
+	
+	//Random constants
+	
+	public final int PARKING_SPACE_DISTANCE = 100; // 100 is temporary, pls fix
+	
+	public final int INTERSECTION_DISTANCE = 100; // 100 is temporary, pls fix
+	
+	//public final static MapNode[] MAP=new MapNode[67];
 	
 	//================================ Motors =================================
 	// these may not be strictly necessary, but it's good to have all constants in one place
@@ -83,7 +93,7 @@ public class RobotMap {
 	
 	
 	/**
-	 * read the values for eve+rything, or most everything, form a properties file.
+	 * read the values for everything, or most everything, form a properties file.
 	 * only exception might be the map
 	 * @param input the path of the properties file
 	 */
@@ -105,19 +115,6 @@ public class RobotMap {
 		/*60-64*/{},{},{},{},{},
 		/*65-69*/{},{},{},{},{},
 		};
-		this.DIRECTION = 0;
-		this.TYPE = 1;
-		this.SPEED = 2;
-		int c = 0;
-		this.FORWARD = c++;
-		this.LEFT = c++;
-		this.RIGHT = c++;
-		this.PARKING = c++;
-		this.INTERSECTION = c++;
-		this.FAST = 740;
-		this.SLOW = 500;
-		
-		this.INTERSECTION_DISTANCE = 100; // 100 is temporary, pls fix
 		
 		this.LEFT_MOTOR = 'A';
 		this.RIGHT_MOTOR = 'D';

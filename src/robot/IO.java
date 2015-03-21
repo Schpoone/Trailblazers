@@ -70,22 +70,6 @@ public class IO {
 	}
 	
 	/**
-	 * Gets the angle between the current position and the position of when it was last reset
-	 * @return angle in degrees
-	 */
-	public float getGyroAngle() {
-		return buffer[3];
-	}
-	
-	/**
-	 * Gets the angular velocity of the gyro sensor
-	 * @return angular velocity in degrees per second
-	 */
-	public float getGyroAngVel() {
-		return buffer[4];
-	}
-	
-	/**
 	 * reads the values from the sensors into an array [ultraDistance (meters),leftColorID (int),rightColorID (int),gyroAngle (degrees),gyroRate (degrees/sec)]
 	 */
 	public float[] read() {

@@ -64,9 +64,32 @@ public class Robot {
 		while(nodeIndex < robotMap.PATH.length) {
 			io.read(); // read from sensors
 
-			currentNode = robotMap.PATH[nodeIndex];
-			if(currentNode[1] == robotMap.INTERSECTION) {
-				defaultDrive(currentNode[2]);
+			currentNode = robotMap.PATH[nodeIndex]; // is the current node. don touch
+			
+			if(currentNode[robotMap.TYPE_INDEX] == robotMap.INTERSECTION) {
+				defaultDrive(currentNode[robotMap.SPEED_INDEX]);
+			}
+			
+			if (currentNode[robotMap.TYPE_INDEX] == robotMap.PARKING) {
+				while (!driveThroughLot(true, currentNode[robotMap.DIRECTION_INDEX])) {}
+				if (currentNode[robotMap.DIRECTION_INDEX] == robotMap.LEFT) {
+					parkLeft();
+				}
+				if (currentNode[robotMap.DIRECTION_INDEX] == robotMap.RIGHT) {
+					parkRight();
+				}
+				wait(3000);
+				if (currentNode[robotMap.DIRECTION_INDEX] == robotMap.LEFT) {
+					unparkLeft();
+				}
+				if (currentNode[robotMap.DIRECTION_INDEX] == robotMap.RIGHT) {
+					unparkRight();//WHY DOESN'T THIS EXIST
+				}
+				driveThroughLot(false, currentNode[robotMap.DIRECTION_INDEX]);
+			}
+			
+			if (currentNode[robotMap.TYPE_INDEX] == robotMap.DRIVE_BY_LOT) {
+				driveThroughLot(false, currentNode[robotMap.DIRECTION_INDEX]);
 			}
 
 			// maybe wait a bit
@@ -105,15 +128,22 @@ public class Robot {
 	private void defaultDrive(int speed) {
 		this.defaultDrive(speed, Color.RED);
 	}
-
+	
+	/**
+	 * Drives forward at a speed until it reaches a specified color in front of it
+	 * Will stop if a collision is detected
+	 * 
+	 * @param speed that the robot should move at
+	 * @param pauseColor is the color the robot needs to stop at
+	 */
 	private void defaultDrive(int speed, int pauseColor) {
 		if(Robot.io.getSanicDistance() <= collisionThreshold) {
 			Robot.drive.stop();
 		} else if (pauseColor > -1 && (Robot.io.getLeftColor() == pauseColor && Robot.io.getRightColor() == pauseColor)) {
 			this.stop(3);
-			if(currentNode[robotMap.DIRECTION] == robotMap.RIGHT) {
+			if(currentNode[robotMap.DIRECTION_INDEX] == robotMap.RIGHT) {
 				intersectionRight();
-			} else if(currentNode[robotMap.DIRECTION] == robotMap.LEFT) {
+			} else if(currentNode[robotMap.DIRECTION_INDEX] == robotMap.LEFT) {
 				intersectionLeft();
 			}
 		} else if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.RED) && Robot.io.getRightColor() != Robot.io.getLeftColor()) {
@@ -134,12 +164,7 @@ public class Robot {
 	 */
 	private void stop(int sec) {
 		Robot.drive.stop();
-		try {
-			this.wait(sec * 1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.wait(sec * 1000);
 	}
 
 	/**
@@ -149,10 +174,9 @@ public class Robot {
 	private void parkLeft() {
 		//Assuming we have found an open spot
 		//idk how to write this in a way that you can keep looping through this
-		long startTime = System.currentTimeMillis();
 		Robot.drive.setSpeed(spdToGetInSpace);
 		Robot.drive.goForward();
-		while (System.currentTimeMillis() - startTime < 100) {}
+		wait(100);
 
 		// turn left 90 degrees, aligning with the red line line
 		boolean leftPassed = false, rightPassed = false;
@@ -191,10 +215,9 @@ public class Robot {
 	private void parkRight() {
 		//Assuming we have found an open spot
 		//idk how to write this in a way that you can keep looping through this
-		long startTime = System.currentTimeMillis();
 		Robot.drive.setSpeed(spdToGetInSpace);
 		Robot.drive.goForward();
-		while (System.currentTimeMillis() - startTime < 100) {}
+		wait(100);
 
 		//turn right 90 degrees, aligning with the blue line line
 		boolean leftPassed = false, rightPassed = false;
@@ -253,20 +276,38 @@ public class Robot {
 		// no overshoot, pls
 		Robot.drive.stop();
 	}
+	
+	private void unparkRight() {
+		while (Robot.io.getLeftColor() != Color.BLUE && Robot.io.getRightColor() != Color.BLUE) { // while we are not out of the parking space
+			Robot.io.read();
+			if(Robot.io.getLeftColor() == Color.WHITE && Robot.io.getRightColor() != Color.WHITE) { // hit the left edge, correcting...
+				Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
+			} else if(Robot.io.getRightColor() == Color.WHITE && Robot.io.getLeftColor() != Color.WHITE) { // hit the right edge, correcting...
+				Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
+			} else { // we're fine now, proceed as planned
+				Robot.drive.setSpeed(spdToGetInSpace); 
+				Robot.drive.goBackward();
+			}
+		}
+		// now we're out
+		// turn right
+		boolean leftHit = false;
+		Robot.drive.setRightVel(spdToGetInSpace);
+		Robot.drive.setLeftVel(-spdToGetInSpace);
+		while(!leftHit) {
+			Robot.io.read();
+			leftHit = Robot.io.getLeftColor() == Color.WHITE;
+		}
+		// no overshoot, pls
+		Robot.drive.stop();
+	}
 
 	/**
 	 * moves the robot to the middle of the intersection and turn left
 	 * assumes robot is stopped and waiting time is over
 	 */
 	private void intersectionLeft() {
-		Robot.rightMotor.resetTachoCount();
-		Robot.leftMotor.resetTachoCount();
-		int avgCount = (leftMotor.getTachoCount() + rightMotor.getTachoCount())/2;
-		while(avgCount < robotMap.INTERSECTION_DISTANCE) {
-			defaultDrive(740);
-			avgCount = (leftMotor.getTachoCount() + rightMotor.getTachoCount())/2;
-		}
-		Robot.drive.stop();
+		moveForward(robotMap.INTERSECTION_DISTANCE, 740);
 		// turn left
 		boolean leftHit = false;
 		Robot.drive.setLeftVel(-spdToGetInSpace);
@@ -284,14 +325,7 @@ public class Robot {
 	 * assumes robot is stopped and waiting time is over
 	 */
 	private void intersectionRight() {
-		Robot.rightMotor.resetTachoCount();
-		Robot.leftMotor.resetTachoCount();
-		int avgCount = (leftMotor.getTachoCount() + rightMotor.getTachoCount())/2;
-		while(avgCount < robotMap.INTERSECTION_DISTANCE) {
-			defaultDrive(740);
-			avgCount = (leftMotor.getTachoCount() + rightMotor.getTachoCount())/2;
-		}
-		Robot.drive.stop();
+		moveForward(robotMap.INTERSECTION_DISTANCE, 740);
 		// turn right
 		boolean rightHit = false;
 		Robot.drive.setLeftVel(spdToGetInSpace);
@@ -301,6 +335,52 @@ public class Robot {
 			rightHit = Robot.io.getRightColor() == Color.WHITE;
 		}
 		// no overshoot, pls
+		Robot.drive.stop();
+	}
+	
+	/**
+	 * Will drive through a parking lot at parking lot speeds
+	 * Will check forward and to the side(s) where there is a lot
+	 * Will stop when open spot (where we need to park) is found
+	 * @param isParking whether we need to park in this lot or not
+	 * @return true when an open space has been found
+	 */
+	private boolean driveThroughLot(boolean isParking, int direction) {
+		if (/*direction where object was detected = direction*/isParking) { 
+			wait(3000);
+			if (Robot.io.getSanicDistance() <= collisionThreshold)//check forward
+				moveForward(robotMap.PARKING_SPACE_DISTANCE, robotMap.LOT_SPEED);
+			if (isParking) return true;	
+		} else if(Robot.io.getSanicDistance() <= collisionThreshold) {
+			Robot.drive.stop();
+		} else if((Robot.io.getLeftColor() == Color.WHITE || Robot.io.getLeftColor() == Color.BLUE) && Robot.io.getRightColor() != Robot.io.getLeftColor()) {
+			Robot.drive.setSpeedRight((int) (Robot.drive.getSpeedRight()*correctionFactor));
+		} else if((Robot.io.getRightColor() == Color.WHITE || Robot.io.getRightColor() == Color.BLUE) && Robot.io.getLeftColor() != Robot.io.getRightColor()) {
+			Robot.drive.setSpeedLeft((int) (Robot.drive.getSpeedLeft()*correctionFactor));
+		} else if(Robot.drive.getSpeedLeft() != Robot.drive.getSpeedRight()) {
+			Robot.drive.setSpeed(Math.max(Robot.drive.getSpeedLeft(), Robot.drive.getSpeedRight()));
+		} else {
+			Robot.drive.setSpeed(robotMap.LOT_SPEED);
+			Robot.drive.goForward();
+		}
+		return false;
+	}
+	
+	private void wait(int milliseconds) {
+		long want = System.currentTimeMillis()+milliseconds;
+		while (System.currentTimeMillis() < want) {
+			
+		}
+	}
+	
+	private void moveForward(int distance, int speed) {
+		Robot.rightMotor.resetTachoCount();
+		Robot.leftMotor.resetTachoCount();
+		int avgCount = (leftMotor.getTachoCount() + rightMotor.getTachoCount())/2;
+		while(avgCount < distance) {
+			defaultDrive(speed);
+			avgCount = (leftMotor.getTachoCount() + rightMotor.getTachoCount())/2;
+		}
 		Robot.drive.stop();
 	}
 
